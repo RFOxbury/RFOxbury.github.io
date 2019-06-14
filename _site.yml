@@ -4,5 +4,5 @@ navbar:
   left:
     - text: "Home"
       href: index.html
-    - text: "About"
-      href: about.html
+    - text: "Papers and presentations"
+      href: papers_and_presentations.html
