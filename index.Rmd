@@ -1,5 +1,5 @@
 ---
-title: "My Website"
+title: "Home"
 ---
 
-Hello, Website!
+This is the homepage
