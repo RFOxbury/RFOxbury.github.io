@@ -1,7 +1,7 @@
 name: "my-website"
 navbar:
   title: "R F Oxbury's website"
-  top:
+  left:
     - text: "Home"
       href: index.html
     - text: "About"
