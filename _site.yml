@@ -11,7 +11,7 @@ navbar:
       href: index.html
     - text: "Papers and presentations"
       href: papers_and_presentations.html
-    - text: "More"
+    - text: "Scrapbook"
       menu:
         - text: "Normalisation"
           href: normalisation_oct25.html

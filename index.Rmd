@@ -1,6 +1,8 @@
 
 ---
-title: "Rosie's website"
+title: "About me"
 ---
 
-This is the homepage
+<img src="IMG_6790.jpg" style="width:25%; margin-right: 20px" align="left">
+
+If you happen to be googling me and stumbled across this website now, please know that it is under construction! (Just like my PhD: not yet ready for public consumption)
