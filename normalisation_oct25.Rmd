@@ -91,7 +91,7 @@ for(i in speakers){
 
 Add to the dataframe:
 ```{r}
-newdata <- cbind(newdata, formant1b, formant_trap_b)
+newdata <- cbind(newdata, trapF1, trapF2)
 ```
 
 And rename it:
@@ -164,10 +164,6 @@ dataX <- dataX %>% mutate(
   normF2_65 = F2_65/s_f2,
   normF2_80 = F2_80/s_f2)
 ```
-Write to csv:
-```{r}
-write.csv(dataX, "normalized.csv")
-```
 
 
 #Try plotting with normalized values
@@ -175,19 +171,12 @@ write.csv(dataX, "normalized.csv")
 Here I will create some of the same plots that I've done before with raw formant frequencies.
 
 ```{r}
-library(phonR)
 library(ggplot2)
 ```
 
 Check structure of dataframe:
 ```{r}
 str(dataX)
-```
-
-
-Vowel plot:
-```{r}
-with(dataX, plotVowels(cbind(normF1_20, normF1_35, normF1_50, normF1_65, normF1_80), cbind(normF2_20, normF2_35, normF2_50, normF2_65, normF2_80), sound_label, group=child, alpha.tokens=0.05, plot.means=TRUE, pch.means=1, alpha.means=1, var.col.by = sound_label, pretty=TRUE, diph.arrows=TRUE, legend.kwd = "bottomleft", main="Normalized adolescent v child data"))
 ```
 
 A scatterplot of all vowel tokens:
@@ -202,20 +191,4 @@ ggplot(dataX, aes(x=F2_20, y=F1_20))+geom_point(aes(color=gender, shape=child))+
 ```
 
 
-##FACE F1
-Create the subset:
-```{r}
-face <- subset(dataX, sound_label=="face")
-```
-
-
-```{r}
-ggplot(face, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=child, shape=gender))+scale_x_reverse()+scale_y_reverse()
-```
-
-Violin plot of onset F1:
-```{r}
-ggplot(face, aes(x=child, y=normF1_20))+geom_violin(aes(fill=gender))
-ggplot(face, aes(x=child, y=F1_20))+geom_violin(aes(fill=gender))
-```
 
