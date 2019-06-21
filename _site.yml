@@ -4,8 +4,8 @@ output_dir: "."
 #exclude: ["docs.txt", "*.csv"]
 
 navbar:
-  title: "My Website"
-  type: default
+  title: "Rosie's website"
+  type: inverse
   left:
     - text: "Home"
       href: index.html

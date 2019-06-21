@@ -1,6 +1,6 @@
 
 ---
-title: "Home"
+title: "Rosie's website"
 ---
 
 This is the homepage
