@@ -1,0 +1,7 @@
+navbar:
+  title: "R F Oxbury's website"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Papers and presentations"
+      href: papers_and_presentations.html
