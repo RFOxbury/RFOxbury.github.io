@@ -316,29 +316,42 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Normalization</h1>
 <h4 class="author">Rosie Oxbury</h4>
-<h4 class="date">25/10/2018</h4>
 
 </div>
 
 
 <p>Today I will be normalizing my PhD data using the Watt Fabricius method (Watt &amp; Fabricius 2003).</p>
-<p>Comparing sociophonetic variation in different speakers’ vowels can be tricky if the speakers in question have very different vocal tract lengths. This is somewhat the case for adult females vs. adult males, and an even bigger problem when comparing vowels as spoken by a child with the same vowels spoken by an adult. This is because in acoustic phonetics, we measure vowels in terms of resonances in the vocal tract - and these resonances are of course dependent on the shape of each individual’s vocal tract.</p>
-<p>We describe vowels in terms of formant frequencies. In terms of the source-filter concept of phonetic production, if the voice box is the source of the sound, the vocal tract becomes the filter. The sound made in the larynx is complex, made up of different harmonics. The first harmonic we call ‘formant 0’ or F0, and this is the fundamental frequency of the speaker’s voice. The other harmonics are multiples of F0.</p>
-<p>Different configurations of the vocal tract may amplify or dampen different harmonics in the voice. In particular, we know that the next two harmonics after F0 - the first formant (F1) and the second formant (F2) - correspond to dimensions of tongue movement in the vocal tract: when the body of the tongue is higher in the vocal tract, F1 will be lower, and if the tongue is low in the mouth, F1 will be higher; when the tongue is further forward, F2 will be higher, and when the tongue is retracted, F2 will be lower.</p>
-<div id="first-step-load-and-inspect-the-data" class="section level3">
-<h3>First step: load and inspect the data</h3>
-<p>We will load the dataframe and rename it ‘data’:</p>
-<pre class="r"><code>load(&quot;alldata_oct24.Rdata&quot;)
-data &lt;- alldata_oct24</code></pre>
+<p>First, load the tidyverse:</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ───────────────────────────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.2.0     ✔ purrr   0.3.2
+## ✔ tibble  2.1.1     ✔ dplyr   0.8.1
+## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ──────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<p>And the data:</p>
+<pre class="r"><code>data &lt;- read.csv(&quot;alldata_oct24.csv&quot;, stringsAsFactors = T, head = T, row.names = 1)</code></pre>
+<p>Comparing sociophonetic variation in different speakers’ vowels can be tricky if the speakers in question have very different vocal tract lengths. This is somewhat the case for adult females vs. adult males, and an even bigger problem when comparing vowels as spoken by a child with the same vowels spoken by an adult. This is because in acoustic phonetics, we measure vowels in terms of resonances in the vocal tract - and these resonances are of course dependent on the shape of each individual’s vocal tract. You can see this issue when we compare the plots below.</p>
+<pre class="r"><code>ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child))+scale_x_reverse()+scale_y_reverse()+facet_grid(~child)+theme_minimal()</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="normalisation_oct25_files/figure-html/fig1-1.png" width="960" /></p>
+<p>You can see that in the plot on the left, i.e. the child data, the scattered vowel tokens take up a larger space. This effect is perhaps clearer if we layer the data:</p>
+<pre class="r"><code>ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()</code></pre>
+<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p><img src="normalisation_oct25_files/figure-html/fig2-1.png" width="768" /></p>
+<p>The children have higher F1 and F2 values in their vowels than the adolescents because the children tend to have higher fundamental frequency (F0) or voice pitch than the adolescents - kind of like comparing a piccolo and a normal flute! As formants are just amplifications of sets of harmonics in the voice, and harmonics are multiples of F0, children’s formants have higher Hz values than adolescents’.</p>
+<p>To combat this, and allow us to compare children and adolescents’ vowel productions in a meaningful way, we normalise. The modified Watt-Fabricius method allows us to normalise away the differences caused by physiological differences between children and adults, or men and women, whilst preserving potentially meaningful dialectal and sociolinguistic variation.</p>
+<div id="first-step-inspect-the-data" class="section level3">
+<h3>First step: inspect the data</h3>
 <p>Check the structure of the data:</p>
 <pre class="r"><code>str(data)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    9303 obs. of  26 variables:
-##  $ X           : int  1 2 3 4 5 6 7 8 9 10 ...
+<pre><code>## &#39;data.frame&#39;:    9303 obs. of  24 variables:
 ##  $ sound_label : Factor w/ 7 levels &quot;face&quot;,&quot;fleece&quot;,..: 4 1 4 4 1 6 2 6 1 4 ...
 ##  $ sound_start : num  4.82 14.6 58.8 59.31 78.93 ...
 ##  $ sound_end   : num  4.89 14.68 58.94 59.41 79.05 ...
 ##  $ word        : Factor w/ 918 levels &quot; TYPE&quot;,&quot;((ALLAI))&quot;,..: 913 503 527 298 510 623 708 434 693 747 ...
-##  $ utterance   : Factor w/ 5242 levels &quot;&#39;cos I have choose you&quot;,..: 45 4912 3083 3083 1318 3461 3569 4642 4213 3781 ...
 ##  $ F1_20       : num  549 644 732 560 572 ...
 ##  $ F1_35       : num  553 658 748 626 564 ...
 ##  $ F1_50       : num  565 645 708 608 537 ...
@@ -359,127 +372,59 @@ data &lt;- alldata_oct24</code></pre>
 ##  $ changeF2norm: num  605 473 -1319 -1117 2368 ...
 ##  $ traj_norm   : num  888 659 1420 1135 2698 ...
 ##  $ child       : Factor w/ 2 levels &quot;child&quot;,&quot;teen&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
-<p>There is a not very useful variable in the first column which we will get rid of:</p>
-<pre class="r"><code>data$X &lt;- NULL</code></pre>
+<p>It looks fine – phew!</p>
 </div>
 <div id="step-2-preparation" class="section level3">
 <h3>Step 2: preparation</h3>
-<p>The Watt-Fabricius method works as follows:</p>
+<p>The <em>modified</em> Watt-Fabricius method works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>For each speaker, find the mean F1 and mean F2 of FLEECE - the most front and closest vowel in the system (highest F2, lowest F1)</li>
-<li>For each speaker, find the mean F1 and F2 of TRAP - the most open vowel in the system (highest F1)</li>
+<li>For each speaker, find the mean F1 of TRAP - the most open vowel in the system (highest F1)</li>
 <li>For each speaker, we hypothesise a back close /u/ vowel which has the same F1 value as FLEECE, and the F1 and F2 frequencies are equal</li>
+<li>For each speaker, we hypothesise that the F2 of TRAP is halfway between the F2 of FLEECE and /u/</li>
 <li>For each speaker, calculate a grand mean for each of the two formants: so for F1, this is the F1 mean you just calculated for FLEECE, TRAP, and /u/, summed together, and divided by 3. Same for F2. W&amp;F call this “S” so I’ll follow suit in this document.</li>
 <li>Normalize the data: for each observation in the data, divide the observed value by the appropriate S value for F_n.</li>
 </ol>
 <p>As I am dealing with diphthongs, I took measurements of F1 and F2 at five different time points across each vowel token. However, while this is a great way to look at diphthongs, for monophthongs, we assume that the F1 and F2 frequencies do not change over time. Therefore, I will create two new variables in the dataset, where each is an average of F_n across that vowel token.</p>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>data &lt;- data %&gt;% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5)
-data &lt;- data %&gt;% mutate(meanF2 = (F2_20+F2_35+F2_50+F2_65+F2_80)/5)</code></pre>
+<pre class="r"><code>data &lt;- data %&gt;% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5,
+                        meanF2 = (F2_20+F2_35+F2_50+F2_65+F2_80)/5)</code></pre>
 </div>
 <div id="mean-f1-and-f2-for-fleece-trap-and-u" class="section level3">
 <h3>Mean F1 and F2 for FLEECE, TRAP and /u/</h3>
-<p>This is going to be a bit complicated so bear with me.</p>
-<p>First, I take the names of all the speakers and make this into a vector.</p>
-<pre class="r"><code>speakers &lt;- levels(data$participant)</code></pre>
-<p>This loop looks nasty but it’s not. First we create two empty vectors, which will get iteratively filled with each speaker’s mean F1 and mean F2 across their tokens of FLEECE. The loop goes through each item in the vector ‘speakers’, and creates a subset of ‘data’ (the big dataframe) where the level of $participant matches the current value of ‘speaker’. Within that subset, a further subset is created including only tokens of the vowel FLEECE. A mean F1 across tokens of FLEECE is calculated and then added to the vector ‘fleeceF1’. The same with F2 of FLEECE.</p>
-<pre class="r"><code>#Create empty vectors for each formant
-fleeceF1 &lt;- vector()
-fleeceF2 &lt;- vector()
-for(i in speakers){
-  speaker &lt;- subset(data, participant==i)
-  fleece &lt;- subset(speaker, sound_label==&quot;fleece&quot;)
-  meanFleeceF1 = mean(fleece$meanF1)
-  fleeceF1 &lt;- append(fleeceF1, meanFleeceF1)
-  meanFleeceF2 = mean(fleece$meanF2)
-  fleeceF2 &lt;- append(fleeceF2, meanFleeceF2)
-}</code></pre>
-<p>Bind these three vectors together into a dataframe:</p>
-<pre class="r"><code>newdata &lt;- cbind(speakers, fleeceF1, fleeceF2)
-newdata &lt;- as.data.frame(newdata)</code></pre>
-<p>Now we do exactly the same process to find each speaker’s mean F1 and F2 for TRAP.</p>
-<pre class="r"><code>trapF1 &lt;- vector()
-trapF2 &lt;- vector()
-for(i in speakers){
-  speaker &lt;- subset(data, participant==i)
-  trap &lt;- subset(speaker, sound_label==&quot;trap&quot;)
-  meanTrapF1 = mean(trap$meanF1)
-  meanTrapF2 = mean(trap$meanF2)
-  trapF1 &lt;- append(trapF1, meanTrapF1)
-  trapF2 &lt;- append(trapF2, meanTrapF2)
-}</code></pre>
-<p>Add to the dataframe:</p>
-<pre class="r"><code>newdata &lt;- cbind(newdata, trapF1, trapF2)</code></pre>
-<p>And rename it:</p>
-<pre class="r"><code>colnames(newdata) &lt;- c(&quot;participant&quot;, &quot;FLEECEF1&quot;, &quot;FLEECEF2&quot;, &quot;TRAPF1&quot;, &quot;TRAPF2&quot;)</code></pre>
-<p>Now hypothetical /u/:</p>
-<pre class="r"><code>newdata &lt;- newdata %&gt;% mutate(u_F1 = FLEECEF1)
-newdata &lt;- newdata %&gt;% mutate(u_F2 = FLEECEF1)</code></pre>
-<pre class="r"><code>str(newdata)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    35 obs. of  7 variables:
-##  $ participant: Factor w/ 35 levels &quot;Ali&quot;,&quot;Amanda&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
-##  $ FLEECEF1   : Factor w/ 35 levels &quot;287.477&quot;,&quot;300.169&quot;,..: 14 27 10 19 18 5 2 20 23 34 ...
-##  $ FLEECEF2   : Factor w/ 35 levels &quot;1917.68675&quot;,&quot;1975.065&quot;,..: 8 23 12 24 18 6 1 35 26 34 ...
-##  $ TRAPF1     : num  706 863 680 948 747 ...
-##  $ TRAPF2     : num  1476 1564 1426 1609 1391 ...
-##  $ u_F1       : Factor w/ 35 levels &quot;287.477&quot;,&quot;300.169&quot;,..: 14 27 10 19 18 5 2 20 23 34 ...
-##  $ u_F2       : Factor w/ 35 levels &quot;287.477&quot;,&quot;300.169&quot;,..: 14 27 10 19 18 5 2 20 23 34 ...</code></pre>
-<p>Make sure everything is numeric</p>
-<pre class="r"><code>newdata$FLEECEF1 &lt;- as.numeric(as.character(newdata$FLEECEF1))
-newdata$FLEECEF2 &lt;- as.numeric(as.character(newdata$FLEECEF2))
-newdata$u_F1 &lt;- as.numeric(as.character(newdata$u_F1))
-newdata$u_F2 &lt;- as.numeric(as.character(newdata$u_F2))</code></pre>
-<p>Grand mean:</p>
-<pre class="r"><code>s_formant1 &lt;- vector()
-s_formant2 &lt;- vector()
-for(i in speakers){
-  person &lt;- subset(newdata, participant==i)
-  s_f1 = (person$FLEECEF1+person$TRAPF1+person$u_F1)/3
-  s_f2 = (person$FLEECEF2+person$TRAPF2+person$u_F2)/3
-  s_formant1 &lt;- append(s_formant1, s_f1)
-  s_formant2 &lt;- append(s_formant2, s_f2)
-}</code></pre>
-<p>Add it to newdata:</p>
-<pre class="r"><code>newdata &lt;- cbind(newdata, s_formant1, s_formant2)</code></pre>
-<pre class="r"><code>colnames(newdata) &lt;- c(&quot;participant&quot;, &quot;FLEECEF1&quot;, &quot;FLEECEF2&quot;, &quot;TRAPF1&quot;, &quot;TRAPF2&quot;, &quot;u_F1&quot;, &quot;u_F2&quot;, &quot;s_f1&quot;, &quot;s_f2&quot;)</code></pre>
-<p>Here goes:</p>
-<pre class="r"><code>dataX &lt;- merge(data, newdata, by =&quot;participant&quot;)</code></pre>
-<p>Write this to csv:</p>
-<pre class="r"><code>write.csv(dataX, &quot;normalise_stage1.csv&quot;)</code></pre>
-<p>Create normalized values for the formants:</p>
-<pre class="r"><code>dataX &lt;- dataX %&gt;% mutate(
-  normF1_20 = F1_20/s_f1,
-  normF1_35 = F1_35/s_f1,
-  normF1_50 = F1_50/s_f1,
-  normF1_65 = F1_65/s_f1,
-  normF1_80 = F1_80/s_f1,
-  normF2_20 = F2_20/s_f2,
-  normF2_35 = F2_35/s_f2,
-  normF2_50 = F2_50/s_f2,
-  normF2_65 = F2_65/s_f2,
-  normF2_80 = F2_80/s_f2)</code></pre>
+<p>This is going to be a bit complicated, so bear with me.</p>
+<p>First, we will select the rows of the dataframe that represent tokens of FLEECE; we group this subset by participant; summarise to get the mean F1 and F2, and store this information in a tibble called fleece_means. Then repeat the process to get the mean F1 of TRAP by participant.</p>
+<p>We do this using the “meanF1” and “meanF2” variables that we created in the step above.</p>
+<pre class="r"><code>fleece_means &lt;- data %&gt;% filter(sound_label == &quot;fleece&quot;) %&gt;%
+  group_by(participant) %&gt;%
+  summarise(meanFleeceF1 = mean(meanF1),
+            meanFleeceF2 = mean(meanF2))
+trap_means &lt;- data %&gt;% filter(sound_label == &quot;trap&quot;) %&gt;%
+  group_by(participant) %&gt;%
+  summarise(meanTRAPF1 = mean(meanF1))</code></pre>
+<p>Now we merge these two tibbles:</p>
+<pre class="r"><code>newdata &lt;- merge(fleece_means, trap_means)</code></pre>
+<p>Then create the hypothetical /u/, which actually just recycles the mean F1 for FLEECE that we found earlier, using them as proxies for both the F1 and F2 of this close back vowel:</p>
+<pre class="r"><code>newdata &lt;- newdata %&gt;% mutate(u_F1 = meanFleeceF1,
+                              u_F2 = meanFleeceF1)</code></pre>
+<p>Then the F2 of TRAP should be halfway between the F2 of /u/ (which, as you remember, is actually the F1 of FLEECE) and the F2 of FLEECE.</p>
+<pre class="r"><code>newdata &lt;- newdata %&gt;%
+  mutate(trapF2 = ((meanFleeceF2 - u_F2)/2) + u_F2)</code></pre>
 </div>
-<div id="try-plotting-with-normalized-values" class="section level1">
-<h1>Try plotting with normalized values</h1>
-<p>Here I will create some of the same plots that I’ve done before with raw formant frequencies.</p>
-<pre class="r"><code>library(ggplot2)</code></pre>
-<p>Check structure of dataframe:</p>
-<pre class="r"><code>str(dataX)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    9303 obs. of  45 variables:
+<div id="grand-mean-for-f1-and-f2-per-speaker" class="section level3">
+<h3>Grand mean for F1 and F2 per speaker</h3>
+<p>Now it’s time to calculate the Grand Mean for each formant, which gets abbreviated to S. To get the grand mean, calculate the mean F1 and mean F2 by summing the F_n values for TRAP, FLEECE and /u/ and dividing by 3; store these values in the vectors ‘s_formant1’ and ‘s_formant2’.</p>
+<pre class="r"><code>newdata &lt;- newdata %&gt;%
+  mutate(S_F1 = (meanFleeceF1 + meanTRAPF1 + u_F1)/3,
+         S_F2 = (meanFleeceF2 + trapF2 + u_F2)/3)</code></pre>
+<p>Now merge the dataframes:</p>
+<pre class="r"><code>dataX &lt;- merge(data, newdata)
+str(dataX)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    9303 obs. of  34 variables:
 ##  $ participant : Factor w/ 35 levels &quot;Ali&quot;,&quot;Amanda&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ sound_label : Factor w/ 7 levels &quot;face&quot;,&quot;fleece&quot;,..: 4 6 4 1 1 7 4 1 4 1 ...
 ##  $ sound_start : num  153 154 213 225 230 ...
 ##  $ sound_end   : num  153 154 213 225 231 ...
 ##  $ word        : Factor w/ 918 levels &quot; TYPE&quot;,&quot;((ALLAI))&quot;,..: 315 434 200 328 388 653 747 21 22 217 ...
-##  $ utterance   : Factor w/ 5242 levels &quot;&#39;cos I have choose you&quot;,..: 4315 4315 2146 2988 502 1097 3630 3871 3871 3871 ...
 ##  $ F1_20       : num  527 709 486 485 539 ...
 ##  $ F1_35       : num  482 769 497 442 490 ...
 ##  $ F1_50       : num  546 795 472 441 465 ...
@@ -501,37 +446,41 @@ for(i in speakers){
 ##  $ child       : Factor w/ 2 levels &quot;child&quot;,&quot;teen&quot;: 2 2 2 2 2 2 2 2 2 2 ...
 ##  $ meanF1      : num  510 774 516 435 535 ...
 ##  $ meanF2      : num  1398 1393 1465 2205 2215 ...
-##  $ FLEECEF1    : num  375 375 375 375 375 ...
-##  $ FLEECEF2    : num  2128 2128 2128 2128 2128 ...
-##  $ TRAPF1      : num  706 706 706 706 706 ...
-##  $ TRAPF2      : num  1476 1476 1476 1476 1476 ...
+##  $ meanFleeceF1: num  375 375 375 375 375 ...
+##  $ meanFleeceF2: num  2128 2128 2128 2128 2128 ...
+##  $ meanTRAPF1  : num  706 706 706 706 706 ...
 ##  $ u_F1        : num  375 375 375 375 375 ...
 ##  $ u_F2        : num  375 375 375 375 375 ...
-##  $ s_f1        : num  485 485 485 485 485 ...
-##  $ s_f2        : num  1326 1326 1326 1326 1326 ...
-##  $ normF1_20   : num  1.086 1.46 1.001 0.999 1.11 ...
-##  $ normF1_35   : num  0.993 1.584 1.023 0.911 1.009 ...
-##  $ normF1_50   : num  1.124 1.638 0.973 0.908 0.958 ...
-##  $ normF1_65   : num  1.011 1.644 1.088 0.876 1.179 ...
-##  $ normF1_80   : num  1.044 1.644 1.228 0.783 1.252 ...
-##  $ normF2_20   : num  0.993 1.082 1.143 1.669 1.574 ...
-##  $ normF2_35   : num  0.99 1.07 1.12 1.57 1.65 ...
-##  $ normF2_50   : num  1.08 1.06 1.08 1.68 1.67 ...
-##  $ normF2_65   : num  1.11 1.05 1.12 1.67 1.71 ...
-##  $ normF2_80   : num  1.1 1 1.07 1.72 1.75 ...</code></pre>
-<p>A scatterplot of all vowel tokens:</p>
-<pre class="r"><code>ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=child, shape=gender))+scale_x_reverse()+scale_y_reverse()</code></pre>
+##  $ trapF2      : num  1252 1252 1252 1252 1252 ...
+##  $ S_F1        : num  485 485 485 485 485 ...
+##  $ S_F2        : num  1252 1252 1252 1252 1252 ...</code></pre>
+</div>
+<div id="normalise" class="section level3">
+<h3>Normalise!!!</h3>
+<p>Final step: we divide every F_n observation by S_n.</p>
+<pre class="r"><code>dataX &lt;- dataX %&gt;% mutate(
+  normF1_20 = F1_20/S_F1,
+  normF1_35 = F1_35/S_F1,
+  normF1_50 = F1_50/S_F1,
+  normF1_65 = F1_65/S_F1,
+  normF1_80 = F1_80/S_F1,
+  normF2_20 = F2_20/S_F2,
+  normF2_35 = F2_35/S_F2,
+  normF2_50 = F2_50/S_F2,
+  normF2_65 = F2_65/S_F2,
+  normF2_80 = F2_80/S_F2)</code></pre>
+</div>
+<div id="try-plotting-with-normalized-values" class="section level1">
+<h1>Try plotting with normalized values</h1>
+<p>We can now plot the normalized data, and compare it with the plot we produced earlier. This is out unnormalized data:</p>
+<pre class="r"><code>ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()+ggtitle(&quot;Raw data&quot;)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="normalisation_oct25_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=gender, shape=child))+scale_x_reverse()+scale_y_reverse()</code></pre>
+<p><img src="normalisation_oct25_files/figure-html/fig3-1.png" width="768" /></p>
+<p>… but this is what the normalized data look like:</p>
+<pre class="r"><code>ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()+ggtitle(&quot;Normalized data&quot;)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="normalisation_oct25_files/figure-html/unnamed-chunk-22-2.png" width="672" /> This is great because it shows us that once the formant frequencies are normalised, the adolescent and child vowel spaces pretty much map onto one another. Compare a version of this plot using unnormalised values:</p>
-<pre class="r"><code>ggplot(dataX, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child, shape=gender))+scale_x_reverse()+scale_y_reverse()</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="normalisation_oct25_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
-<pre class="r"><code>ggplot(dataX, aes(x=F2_20, y=F1_20))+geom_point(aes(color=gender, shape=child))+scale_x_reverse()+scale_y_reverse()</code></pre>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<p><img src="normalisation_oct25_files/figure-html/unnamed-chunk-23-2.png" width="672" /></p>
+<p><img src="normalisation_oct25_files/figure-html/fig4-1.png" width="768" /></p>
+<p>Mission accomplished! In this final plot, you can see that in the normalized data, the space covered by the children’s vowels more or less exactly maps onto the space covered by the adolescents’ vowels.</p>
 </div>
 
 

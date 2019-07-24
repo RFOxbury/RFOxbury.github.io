@@ -1,194 +1,142 @@
 ---
 title: "Normalization"
 author: "Rosie Oxbury"
-date: "25/10/2018"
 output: html_document
 ---
 Today I will be normalizing my PhD data using the Watt Fabricius method (Watt & Fabricius 2003).
 
-Comparing sociophonetic variation in different speakers' vowels can be tricky if the speakers in question have very different vocal tract lengths. This is somewhat the case for adult females vs. adult males, and an even bigger problem when comparing vowels as spoken by a child with the same vowels spoken by an adult. This is because in acoustic phonetics, we measure vowels in terms of resonances in the vocal tract - and these resonances are of course dependent on the shape of each individual's vocal tract.
-
-We describe vowels in terms of formant frequencies. In terms of the source-filter concept of phonetic production, if the voice box is the source of the sound, the vocal tract becomes the filter. The sound made in the larynx is complex, made up of different harmonics. The first harmonic we call 'formant 0' or F0, and this is the fundamental frequency of the speaker's voice. The other harmonics are multiples of F0.
-
-Different configurations of the vocal tract may amplify or dampen different harmonics in the voice. In particular, we know that the next two harmonics after F0 - the first formant (F1) and the second formant (F2) - correspond to dimensions of tongue movement in the vocal tract: when the body of the tongue is higher in the vocal tract, F1 will be lower, and if the tongue is low in the mouth, F1 will be higher; when the tongue is further forward, F2 will be higher, and when the tongue is retracted, F2 will be lower.
-
-###First step: load and inspect the data
-We will load the dataframe and rename it 'data':
+First, load the tidyverse:
 ```{r}
-load("alldata_oct24.Rdata")
-data <- alldata_oct24
+library(tidyverse)
 ```
+And the data:
+```{r}
+data <- read.csv("alldata_oct24.csv", stringsAsFactors = T, head = T, row.names = 1)
+```
+
+
+Comparing sociophonetic variation in different speakers' vowels can be tricky if the speakers in question have very different vocal tract lengths. This is somewhat the case for adult females vs. adult males, and an even bigger problem when comparing vowels as spoken by a child with the same vowels spoken by an adult. This is because in acoustic phonetics, we measure vowels in terms of resonances in the vocal tract - and these resonances are of course dependent on the shape of each individual's vocal tract. You can see this issue when we compare the plots below.
+```{r fig1, fig.width=10, fig.height=6}
+ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child))+scale_x_reverse()+scale_y_reverse()+facet_grid(~child)+theme_minimal()
+```
+
+
+You can see that in the plot on the left, i.e. the child data, the scattered vowel tokens take up a larger space. This effect is perhaps clearer if we layer the data:
+```{r fig2, fig.width=8, fig.height=6}
+ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()
+```
+
+The children have higher F1 and F2 values in their vowels than the adolescents because the children tend to have higher fundamental frequency (F0) or voice pitch than the adolescents - kind of like comparing a piccolo and a normal flute! As formants are just amplifications of sets of harmonics in the voice, and harmonics are multiples of F0, children's formants have higher Hz values than adolescents'.
+
+To combat this, and allow us to compare children and adolescents' vowel productions in a meaningful way, we normalise. The modified Watt-Fabricius method allows us to normalise away the differences caused by physiological differences between children and adults, or men and women, whilst preserving potentially meaningful dialectal and sociolinguistic variation.
+
+###First step: inspect the data
+
 Check the structure of the data:
 ```{r}
 str(data)
 ```
-There is a not very useful variable in the first column which we will get rid of:
-```{r}
-data$X <- NULL
-```
+
+It looks fine -- phew!
 
 ### Step 2: preparation
-The Watt-Fabricius method works as follows:
+The *modified* Watt-Fabricius method works as follows:
 
 1. For each speaker, find the mean F1 and mean F2 of FLEECE - the most front and closest vowel in the system (highest F2, lowest F1)
-2. For each speaker, find the mean F1 and F2 of TRAP - the most open vowel in the system (highest F1)
+2. For each speaker, find the mean F1 of TRAP - the most open vowel in the system (highest F1)
 3. For each speaker, we hypothesise a back close /u/ vowel which has the same F1 value as FLEECE, and the F1 and F2 frequencies are equal
-4. For each speaker, calculate a grand mean for each of the two formants: so for F1, this is the F1 mean you just calculated for FLEECE, TRAP, and /u/, summed together, and divided by 3. Same for F2. W&F call this "S" so I'll follow suit in this document.
-5. Normalize the data: for each observation in the data, divide the observed value by the appropriate S value for F_n.
+4. For each speaker, we hypothesise that the F2 of TRAP is halfway between the F2 of FLEECE and /u/
+5. For each speaker, calculate a grand mean for each of the two formants: so for F1, this is the F1 mean you just calculated for FLEECE, TRAP, and /u/, summed together, and divided by 3. Same for F2. W&F call this "S" so I'll follow suit in this document.
+6. Normalize the data: for each observation in the data, divide the observed value by the appropriate S value for F_n.
 
 As I am dealing with diphthongs, I took measurements of F1 and F2 at five different time points across each vowel token. However, while this is a great way to look at diphthongs, for monophthongs, we assume that the F1 and F2 frequencies do not change over time. Therefore, I will create two new variables in the dataset, where each is an average of F_n across that vowel token.
 ```{r}
-library(dplyr)
-data <- data %>% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5)
-data <- data %>% mutate(meanF2 = (F2_20+F2_35+F2_50+F2_65+F2_80)/5)
+data <- data %>% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5,
+                        meanF2 = (F2_20+F2_35+F2_50+F2_65+F2_80)/5)
 ```
-
 
 
 ###Mean F1 and F2 for FLEECE, TRAP and /u/
 
-This is going to be a bit complicated so bear with me.
+This is going to be a bit complicated, so bear with me.
 
-First, I take the names of all the speakers and make this into a vector.
-```{r}
-speakers <- levels(data$participant)
-```
+First, we will select the rows of the dataframe that represent tokens of FLEECE; we group this subset by participant; summarise to get the mean F1 and F2, and store this information in a tibble called fleece_means. Then repeat the process to get the mean F1 of TRAP by participant.
 
-This loop looks nasty but it's not. First we create two empty vectors, which will get iteratively filled with each speaker's mean F1 and mean F2 across their tokens of FLEECE. The loop goes through each item in the vector 'speakers', and creates a subset of 'data' (the big dataframe) where the level of $participant matches the current value of 'speaker'. Within that subset, a further subset is created including only tokens of the vowel FLEECE. A mean F1 across tokens of FLEECE is calculated and then added to the vector 'fleeceF1'. The same with F2 of FLEECE.
-```{r}
-#Create empty vectors for each formant
-fleeceF1 <- vector()
-fleeceF2 <- vector()
-for(i in speakers){
-  speaker <- subset(data, participant==i)
-  fleece <- subset(speaker, sound_label=="fleece")
-  meanFleeceF1 = mean(fleece$meanF1)
-  fleeceF1 <- append(fleeceF1, meanFleeceF1)
-  meanFleeceF2 = mean(fleece$meanF2)
-  fleeceF2 <- append(fleeceF2, meanFleeceF2)
-}
-```
-
-Bind these three vectors together into a dataframe:
-```{r}
-newdata <- cbind(speakers, fleeceF1, fleeceF2)
-newdata <- as.data.frame(newdata)
-```
-
-Now we do exactly the same process to find each speaker's mean F1 and F2 for TRAP.
-```{r}
-trapF1 <- vector()
-trapF2 <- vector()
-for(i in speakers){
-  speaker <- subset(data, participant==i)
-  trap <- subset(speaker, sound_label=="trap")
-  meanTrapF1 = mean(trap$meanF1)
-  meanTrapF2 = mean(trap$meanF2)
-  trapF1 <- append(trapF1, meanTrapF1)
-  trapF2 <- append(trapF2, meanTrapF2)
-}
-```
-
-Add to the dataframe:
-```{r}
-newdata <- cbind(newdata, trapF1, trapF2)
-```
-
-And rename it:
-```{r}
-colnames(newdata) <- c("participant", "FLEECEF1", "FLEECEF2", "TRAPF1", "TRAPF2")
-```
-
-Now hypothetical /u/:
-```{r}
-newdata <- newdata %>% mutate(u_F1 = FLEECEF1)
-newdata <- newdata %>% mutate(u_F2 = FLEECEF1)
-```
+We do this using the "meanF1" and "meanF2" variables that we created in the step above.
 
 ```{r}
-str(newdata)
+fleece_means <- data %>% filter(sound_label == "fleece") %>%
+  group_by(participant) %>%
+  summarise(meanFleeceF1 = mean(meanF1),
+            meanFleeceF2 = mean(meanF2))
+trap_means <- data %>% filter(sound_label == "trap") %>%
+  group_by(participant) %>%
+  summarise(meanTRAPF1 = mean(meanF1))
 ```
-Make sure everything is numeric
+
+Now we merge these two tibbles:
 ```{r}
-newdata$FLEECEF1 <- as.numeric(as.character(newdata$FLEECEF1))
-newdata$FLEECEF2 <- as.numeric(as.character(newdata$FLEECEF2))
-newdata$u_F1 <- as.numeric(as.character(newdata$u_F1))
-newdata$u_F2 <- as.numeric(as.character(newdata$u_F2))
+newdata <- merge(fleece_means, trap_means)
+```
+
+Then create the hypothetical /u/, which actually just recycles the mean F1 for FLEECE that we found earlier, using them as proxies for both the F1 and F2 of this close back vowel:
+
+```{r}
+newdata <- newdata %>% mutate(u_F1 = meanFleeceF1,
+                              u_F2 = meanFleeceF1)
+```
+
+Then the F2 of TRAP should be halfway between the F2 of /u/ (which, as you remember, is actually the F1 of FLEECE) and the F2 of FLEECE.
+```{r}
+newdata <- newdata %>%
+  mutate(trapF2 = ((meanFleeceF2 - u_F2)/2) + u_F2)
 ```
 
 
-Grand mean:
+### Grand mean for F1 and F2 per speaker
+
+Now it’s time to calculate the Grand Mean for each formant, which gets abbreviated to S. To get the grand mean, calculate the mean F1 and mean F2 by summing the F_n values for TRAP, FLEECE and /u/ and dividing by 3; store these values in the vectors ‘s_formant1’ and ‘s_formant2’.
 ```{r}
-s_formant1 <- vector()
-s_formant2 <- vector()
-for(i in speakers){
-  person <- subset(newdata, participant==i)
-  s_f1 = (person$FLEECEF1+person$TRAPF1+person$u_F1)/3
-  s_f2 = (person$FLEECEF2+person$TRAPF2+person$u_F2)/3
-  s_formant1 <- append(s_formant1, s_f1)
-  s_formant2 <- append(s_formant2, s_f2)
-}
+newdata <- newdata %>%
+  mutate(S_F1 = (meanFleeceF1 + meanTRAPF1 + u_F1)/3,
+         S_F2 = (meanFleeceF2 + trapF2 + u_F2)/3)
 ```
 
-Add it to newdata:
+Now merge the dataframes:
 ```{r}
-newdata <- cbind(newdata, s_formant1, s_formant2)
+dataX <- merge(data, newdata)
+str(dataX)
 ```
 
+### Normalise!!!
 
-```{r}
-colnames(newdata) <- c("participant", "FLEECEF1", "FLEECEF2", "TRAPF1", "TRAPF2", "u_F1", "u_F2", "s_f1", "s_f2")
-```
+Final step: we divide every F_n observation by S_n.
 
-Here goes:
-```{r}
-dataX <- merge(data, newdata, by ="participant")
-```
-
-Write this to csv:
-```{r}
-write.csv(dataX, "normalise_stage1.csv")
-```
-
-Create normalized values for the formants:
 ```{r}
 dataX <- dataX %>% mutate(
-  normF1_20 = F1_20/s_f1,
-  normF1_35 = F1_35/s_f1,
-  normF1_50 = F1_50/s_f1,
-  normF1_65 = F1_65/s_f1,
-  normF1_80 = F1_80/s_f1,
-  normF2_20 = F2_20/s_f2,
-  normF2_35 = F2_35/s_f2,
-  normF2_50 = F2_50/s_f2,
-  normF2_65 = F2_65/s_f2,
-  normF2_80 = F2_80/s_f2)
+  normF1_20 = F1_20/S_F1,
+  normF1_35 = F1_35/S_F1,
+  normF1_50 = F1_50/S_F1,
+  normF1_65 = F1_65/S_F1,
+  normF1_80 = F1_80/S_F1,
+  normF2_20 = F2_20/S_F2,
+  normF2_35 = F2_35/S_F2,
+  normF2_50 = F2_50/S_F2,
+  normF2_65 = F2_65/S_F2,
+  normF2_80 = F2_80/S_F2)
 ```
 
 
 #Try plotting with normalized values
 
-Here I will create some of the same plots that I've done before with raw formant frequencies.
-
-```{r}
-library(ggplot2)
+We can now plot the normalized data, and compare it with the plot we produced earlier. This is out unnormalized data:
+```{r fig3, fig.width=8, fig.height=6}
+ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()+ggtitle("Raw data")
 ```
 
-Check structure of dataframe:
-```{r}
-str(dataX)
+... but this is what the normalized data look like:
+```{r fig4, fig.width=8, fig.height=6}
+ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()+ggtitle("Normalized data")
 ```
 
-A scatterplot of all vowel tokens:
-```{r}
-ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=child, shape=gender))+scale_x_reverse()+scale_y_reverse()
-ggplot(dataX, aes(x=normF2_20, y=normF1_20))+geom_point(aes(color=gender, shape=child))+scale_x_reverse()+scale_y_reverse()
-```
-This is great because it shows us that once the formant frequencies are normalised, the adolescent and child vowel spaces pretty much map onto one another. Compare a version of this plot using unnormalised values:
-```{r}
-ggplot(dataX, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child, shape=gender))+scale_x_reverse()+scale_y_reverse()
-ggplot(dataX, aes(x=F2_20, y=F1_20))+geom_point(aes(color=gender, shape=child))+scale_x_reverse()+scale_y_reverse()
-```
-
-
-
+Mission accomplished! In this final plot, you can see that in the normalized data, the space covered by the children's vowels more or less exactly maps onto the space covered by the adolescents' vowels.
