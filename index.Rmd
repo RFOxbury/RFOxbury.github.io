@@ -3,10 +3,10 @@
 title: "About me"
 ---
 
-<img src="IMG_6790.jpg" style="width:25%; margin-right: 20px" align="left">
-
-
+<img src="IMG_6790.jpg" style="width:23%; margin-right: 20px" align="left">
+<img src="img020.jpg" style="width:20%; margin-left: 20px" align="right">
 
 Hello!
 
 I am a PhD student at Queen Mary University of London. I am a variationist sociolinguist working on: sociophonetics -- specifically, changes in the diphthongs in Multicultural London English; discourse pragmatic variation and change. I also do a little bit of discourse analysis...
+
