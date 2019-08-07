@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Rosie Oxbury" />
 
 
-<title>Papers and presentations</title>
+<title>Representing vowel changes</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -316,22 +317,80 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Papers and presentations</h1>
+<h1 class="title toc-ignore">Representing vowel changes</h1>
+<h4 class="author">Rosie Oxbury</h4>
 
 </div>
 
 
-<div id="publications" class="section level1">
-<h1>Publications</h1>
-<p>Oxbury, R. (under review). The forms and functions of “Breaking into song” during in-group conversations. Text &amp; Talk. Current version [here]</p>
-<p>Oxbury, R., &amp; de Leeuw, E. (under review). Style-shifting in Multicultural London English in an all-girls homework club. English Today.</p>
-<p>Oxbury, R., &amp; McCarthy, K. (2019). Acquiring a multiethnolect: the production of diphthongs by children and adolescents in West London. Proceedings of the 19th International Congress of Phonetic Sciences. To be presented at the International Congress of Phonetic Sciences, Melbourne, August 2019. Full paper <a href="pdfs/390_OxburyMcCarthy_final.pdf">here</a>.</p>
+<p>Today we will create our own vowel quadrilateral in order to give examples of (a) model vowel qualities in a given language variety, and (b) expected directions of change.</p>
+<p>Often, when we want to explain the linguistic change in progress that we are studying, we like to use graphs such as the one below, which shows typical vowel qualities for Received Pronunciation:</p>
+<p><img src="RP_vowel_chart_(diphthongs).gif" style="width:40%" align="center"></p>
+<p>But sometimes, the internet doesn’t have what you’re looking for, and you would really like to make your own… but how?? Well, this is what we will do today. It’s actually very easy!</p>
+<p>First step, as always: load tidyverse.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<div id="draw-the-quadrilateral" class="section level1">
+<h1>Draw the quadrilateral</h1>
+<p>First, we make the outline quadrilateral. Later, we will overlay this with our model vowel values.</p>
+<p>To do this, decide where you want the corners of your quadrilateral to be – you may want to play around with this. I want my top left to be (1500, 200), top right to be (200, 200), bottom right (200, 2500), and bottom left (900, 2500). Remember that in typical vowel plots, x represents F2, y represents F1, and each axis gets flipped, so that the resulting quadrilateral represents a cross-section of the mouth.</p>
+<pre class="r"><code>x &lt;- c(200, 1200, 2000, 200)
+y &lt;- c(1800, 1800, 200, 200)
+quad &lt;- as.data.frame(cbind(x, y))</code></pre>
+<p>Now plot this:</p>
+<pre class="r"><code>quad_plot &lt;- ggplot(quad)+scale_x_reverse()+scale_y_reverse()+geom_polygon(aes(x, y), colour=&quot;black&quot;, fill=NA)
+quad_plot</code></pre>
+<p><img src="vowel_quad_files/figure-html/unnamed-chunk-3-1.png" width="768" /></p>
+<p>Here we have the beginnings of a vowel quadrilateral.</p>
 </div>
-<div id="conference-presentations" class="section level1">
-<h1>Conference presentations</h1>
-<p>Oxbury, R. (2018). Old contexts for new changes in Multicultural London English? Presentation given at Sociolinguistic Symposium 22, University of Auckland, 27th–30th June.</p>
-<p>Oxbury, R. (2017). Functions of “break[ing] into song” in interactions between three sisters. Presentation given at iMean 5, University of West England, 6th–8th April. Slides <a href="pdfs/iMean_final.pdf">here</a>.</p>
-<p>Oxbury, R. &amp; de Leeuw, E. (April 2017). Situational style-shifting in Multicultural London English in an all girls homework club. Presentation given at Language Variation and Change Southern England, University of Suffolk, 12th April. Slides <a href="pdfs/Oxbury_deLeeuw_LVCSE.pdf">here</a>.</p>
+<div id="add-model-vowels" class="section level1">
+<h1>Add model vowels</h1>
+<p>Next, create some fake data:</p>
+<pre class="r"><code>f2 &lt;- c(1800, 300, 1400, 900, 900, 600)
+f1 &lt;- c(300, 300, 900, 1500, 1600, 900)
+vowel &lt;- c(&quot;fleece&quot;, &quot;goose&quot;, &quot;face&quot;, &quot;price&quot;, &quot;mouth&quot;, &quot;choice&quot;)
+data &lt;- as.data.frame(cbind(f2, f1, vowel))</code></pre>
+<p>Check structure:</p>
+<pre class="r"><code>str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    6 obs. of  3 variables:
+##  $ f2   : Factor w/ 5 levels &quot;1400&quot;,&quot;1800&quot;,..: 2 3 1 5 5 4
+##  $ f1   : Factor w/ 4 levels &quot;1500&quot;,&quot;1600&quot;,..: 3 3 4 1 2 4
+##  $ vowel: Factor w/ 6 levels &quot;choice&quot;,&quot;face&quot;,..: 3 4 2 6 5 1</code></pre>
+<p>Convert the formants to numeric:</p>
+<pre class="r"><code>data$f2 &lt;- as.numeric(as.character(data$f2))
+data$f1 &lt;- as.numeric(as.character(data$f1))</code></pre>
+<p>Add these to the plot as points:</p>
+<pre class="r"><code>quad2 &lt;- quad_plot+geom_point(data=data, aes(x=f2, y=f1), size=3)+theme_classic()
+quad2</code></pre>
+<p><img src="vowel_quad_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+<p>Add labels:</p>
+<pre class="r"><code>quad3 &lt;- quad2 + geom_text(data=data, aes(x=f2, y=f1, label=vowel), nudge_x=-60, vjust=-0.7, size=5)
+quad3</code></pre>
+<p><img src="vowel_quad_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>Get rid of axis numbering:</p>
+<pre class="r"><code>quad4 &lt;- quad3 + theme(axis.line=element_blank(),axis.text.x=element_blank(),
+          axis.text.y=element_blank(),axis.ticks=element_blank(),
+          axis.title.x=element_blank(),
+          axis.title.y=element_blank(),legend.position=&quot;none&quot;,
+          panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),plot.background=element_blank())
+quad4</code></pre>
+<p><img src="vowel_quad_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+</div>
+<div id="change-in-progress" class="section level1">
+<h1>Change in progress</h1>
+<p>What if we want to show the direction of change in progress? This is often the goal in using such diagrams, and it would be really nice to have change clearly represented in our graph.</p>
+<p>We can do this quite easily.</p>
+<p>Now we add this to the plot as another layer. You add each arrow as a separate “geom_curve” item:</p>
+<pre class="r"><code>#f2.old &lt;- c(900, 900, 600)
+#f1.old &lt;- c(1500, 1600, 900)
+#f2.new &lt;- c(500, 1200, 500)
+#f1.new &lt;- c(1000, 1000, 500)
+
+quad4 + 
+  geom_curve(aes(x = 900, y = 1500, xend = 500, yend = 1000, colour = &quot;red&quot;), curvature=+0.5, arrow=arrow()) + 
+  geom_curve(aes(x = 900, y = 1600, xend = 1300, yend = 1000, colour = &quot;red&quot;), curvature=-0.5, arrow=arrow()) + 
+  geom_curve(aes(x = 600, y = 900, xend = 400, yend = 500, colour = &quot;red&quot;), curvature=+0.3, arrow=arrow())</code></pre>
+<p><img src="vowel_quad_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
 </div>
 
 

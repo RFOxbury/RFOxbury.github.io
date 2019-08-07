@@ -15,3 +15,5 @@ navbar:
       menu:
         - text: "Normalisation"
           href: normalisation_oct25.html
+        - text: "Representing vowel changes"
+          href: vowel_quad.html
