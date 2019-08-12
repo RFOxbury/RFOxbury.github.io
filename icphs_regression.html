@@ -1,0 +1,3090 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Rosie Oxbury" />
+
+<meta name="date" content="2019-10-08" />
+
+<title>ICPhS: regression analyses</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Rosie's website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="papers_and_presentations.html">Papers and presentations</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Scrapbook
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="icphs_plotting.html">ICPhS: vowel plot</a>
+    </li>
+    <li>
+      <a href="normalisation_oct25.html">Normalisation</a>
+    </li>
+    <li>
+      <a href="vowel_quad.html">Representing vowel changes</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">ICPhS: regression analyses</h1>
+<h4 class="author">Rosie Oxbury</h4>
+<h4 class="date">10/08/2019</h4>
+
+</div>
+
+
+<p>Below is the code (a) for the statistical analysis Oxbury &amp; McCarthy did for their ICPhS 2019 poster, and (b) for the violin plots that appeared at the bottom of the poster.</p>
+<p><img src="icphs_poster.png" style="width:50%; margin-right: 20px" align="centre"></p>
+<div id="cleaning" class="section level1">
+<h1>Cleaning</h1>
+<p>First, load necessary packages:</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ──────────────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.2.0     ✔ purrr   0.3.2
+## ✔ tibble  2.1.1     ✔ dplyr   0.8.1
+## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
+## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ─────────────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(brms)</code></pre>
+<pre><code>## Loading required package: Rcpp</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;xts&#39;:
+##   method     from
+##   as.zoo.xts zoo</code></pre>
+<pre><code>## Loading &#39;brms&#39; package (version 2.9.0). Useful instructions
+## can be found by typing help(&#39;brms&#39;). A more detailed introduction
+## to the package is available through vignette(&#39;brms_overview&#39;).</code></pre>
+<pre class="r"><code>library(sjstats)
+library(bayesplot)</code></pre>
+<pre><code>## This is bayesplot version 1.7.0</code></pre>
+<pre><code>## - Online documentation and vignettes at mc-stan.org/bayesplot</code></pre>
+<pre><code>## - bayesplot theme set to bayesplot::theme_default()</code></pre>
+<pre><code>##    * Does _not_ affect other ggplot2 plots</code></pre>
+<pre><code>##    * See ?bayesplot_theme_set for details on theme setting</code></pre>
+<p>Load in the data:</p>
+<pre class="r"><code>diphs &lt;- read_csv(&quot;icphs_data.csv&quot;)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   .default = col_double(),
+##   participant = col_character(),
+##   sound_label = col_character(),
+##   word = col_character(),
+##   task = col_character(),
+##   age = col_character(),
+##   gender = col_character(),
+##   rol.var = col_character(),
+##   face.l = col_character(),
+##   price.l = col_character()
+## )</code></pre>
+<pre><code>## See spec(...) for full column specifications.</code></pre>
+<p>Alter duration so that (a) there are no tokens with duration longer than 0.75 seconds, and (b) it is log-transformed.</p>
+<pre class="r"><code>ggplot(diphs, aes(x = duration, fill = age)) + geom_histogram(bins = 100)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-3-1.png" width="672" /> Filter so that duration has to be less than 0.75, then see what it looks like.</p>
+<pre class="r"><code>diphs2 &lt;- diphs %&gt;% filter(duration &lt; 0.75)</code></pre>
+<p>See what it looks like log-transformed:</p>
+<pre class="r"><code>ggplot(diphs2, aes(x = log10(duration), fill = age)) + geom_histogram(bins = 100)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code>diphs3 &lt;- mutate(diphs2,
+               LogDur = log10(duration))</code></pre>
+<p>… and standardize it</p>
+<pre class="r"><code>diphs3 &lt;- mutate(diphs3,
+               Log_dur_z = scale(LogDur))</code></pre>
+<p>Check that all the other variables are OK. Convert some of them to factors</p>
+<pre class="r"><code>str(diphs3)</code></pre>
+<pre><code>## Classes &#39;spec_tbl_df&#39;, &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;: 8548 obs. of  60 variables:
+##  $ participant : chr  &quot;Amanda&quot; &quot;Amanda&quot; &quot;Amanda&quot; &quot;Amanda&quot; ...
+##  $ sound_label : chr  &quot;face&quot; &quot;goat&quot; &quot;price&quot; &quot;price&quot; ...
+##  $ sound_start : num  7.26 44.6 47.14 91.27 95.22 ...
+##  $ sound_end   : num  7.6 44.7 47.2 91.3 95.3 ...
+##  $ word        : chr  &quot;HEY&quot; &quot;GO&quot; &quot;FIND&quot; &quot;INSIDE&quot; ...
+##  $ F1_20       : num  840 502 847 657 598 ...
+##  $ F1_35       : num  717 533 878 759 637 ...
+##  $ F1_50       : num  633 590 863 799 602 ...
+##  $ F1_65       : num  642 527 834 802 580 ...
+##  $ F1_80       : num  604 470 808 724 573 ...
+##  $ F2_20       : num  1875 1744 1528 1507 1163 ...
+##  $ F2_35       : num  1904 1831 1642 1475 1076 ...
+##  $ F2_50       : num  2129 1867 1692 1415 1144 ...
+##  $ F2_65       : num  2094 1888 1790 1456 948 ...
+##  $ F2_80       : num  2119 1842 1868 1501 1239 ...
+##  $ task        : chr  &quot;soc.int&quot; &quot;soc.int&quot; &quot;soc.int&quot; &quot;soc.int&quot; ...
+##  $ age         : chr  &quot;adolescent&quot; &quot;adolescent&quot; &quot;adolescent&quot; &quot;adolescent&quot; ...
+##  $ gender      : chr  &quot;F&quot; &quot;F&quot; &quot;F&quot; &quot;F&quot; ...
+##  $ meanF1      : num  687 524 846 748 598 ...
+##  $ meanF2      : num  2024 1834 1704 1471 1114 ...
+##  $ meanFleeceF1: num  460 460 460 460 460 ...
+##  $ meanFleeceF2: num  2648 2648 2648 2648 2648 ...
+##  $ meanTRAPF1  : num  853 853 853 853 853 ...
+##  $ u_F1        : num  460 460 460 460 460 ...
+##  $ u_F2        : num  460 460 460 460 460 ...
+##  $ trapF2      : num  1554 1554 1554 1554 1554 ...
+##  $ S_F1        : num  591 591 591 591 591 ...
+##  $ S_F2        : num  1554 1554 1554 1554 1554 ...
+##  $ normF1_20   : num  1.421 0.849 1.433 1.112 1.011 ...
+##  $ normF1_35   : num  1.213 0.901 1.485 1.285 1.078 ...
+##  $ normF1_50   : num  1.072 0.998 1.461 1.351 1.019 ...
+##  $ normF1_65   : num  1.087 0.892 1.411 1.357 0.982 ...
+##  $ normF1_80   : num  1.022 0.796 1.368 1.225 0.969 ...
+##  $ normF2_20   : num  1.207 1.122 0.984 0.97 0.748 ...
+##  $ normF2_35   : num  1.225 1.178 1.057 0.949 0.692 ...
+##  $ normF2_50   : num  1.37 1.201 1.089 0.911 0.736 ...
+##  $ normF2_65   : num  1.348 1.215 1.152 0.937 0.61 ...
+##  $ normF2_80   : num  1.363 1.186 1.202 0.966 0.797 ...
+##  $ duration    : num  0.3321 0.0872 0.0859 0.0715 0.0792 ...
+##  $ changeF1    : num  -236 -31.2 -38.6 67.3 -25 ...
+##  $ normChangeF1: num  -0.3994 -0.0528 -0.0654 0.1139 -0.0423 ...
+##  $ changeF2    : num  243.41 98.4 339.78 -5.69 75.84 ...
+##  $ normChangeF2: num  0.15664 0.06332 0.21865 -0.00366 0.0488 ...
+##  $ VL          : num  339 103.2 342 67.6 79.9 ...
+##  $ normVL      : num  0.429 0.0825 0.2282 0.114 0.0646 ...
+##  $ normVSL1    : num  0.2087 0.0766 0.0896 0.1745 0.0869 ...
+##  $ normVSL2    : num  0.2024 0.0996 0.04 0.0767 0.073 ...
+##  $ normVSL3    : num  0.0269 0.1069 0.0808 0.0265 0.1323 ...
+##  $ normVSL4    : num  0.067 0.1006 0.0661 0.1347 0.1877 ...
+##  $ VSL1        : num  126.2 92.2 117.7 107.3 95.2 ...
+##  $ VSL2        : num  239.5 67.6 51.7 71.6 76.5 ...
+##  $ VSL3        : num  35.4 66.3 102.7 40.4 198.2 ...
+##  $ VSL4        : num  45.5 73.1 82 90.2 291.1 ...
+##  $ TrajLength  : num  447 299 354 310 661 ...
+##  $ norm_TL     : num  0.505 0.384 0.276 0.413 0.48 ...
+##  $ rol.var     : chr  &quot;n.a.&quot; &quot;no.rolling&quot; &quot;n.a.&quot; &quot;n.a.&quot; ...
+##  $ face.l      : chr  &quot;fine&quot; &quot;n.a.&quot; &quot;n.a.&quot; &quot;n.a.&quot; ...
+##  $ price.l     : chr  &quot;n.a.&quot; &quot;n.a.&quot; &quot;fine&quot; &quot;fine&quot; ...
+##  $ LogDur      : num  -0.479 -1.059 -1.066 -1.146 -1.101 ...
+##  $ Log_dur_z   : num [1:8548, 1] 2.185 -0.685 -0.718 -1.112 -0.893 ...
+##   ..- attr(*, &quot;scaled:center&quot;)= num -0.921
+##   ..- attr(*, &quot;scaled:scale&quot;)= num 0.202</code></pre>
+<p>Age as factor and sex as factor</p>
+<pre class="r"><code>diphs3$age &lt;- as.factor(diphs3$age)
+diphs3$gender &lt;- as.factor(diphs3$gender)</code></pre>
+<p>Participant and word as factors too</p>
+<pre class="r"><code>diphs3$participant &lt;- as.factor(diphs3$participant)
+diphs3$word &lt;- as.factor(diphs3$word)</code></pre>
+<p>Change the gender variable to sex</p>
+<pre class="r"><code>diphs3 &lt;- diphs3 %&gt;% rename(Sex = gender)</code></pre>
+<p>Finally, we are going to recode that variable so that male becomes the reference level in the models we build.</p>
+<pre class="r"><code>diphs3$Sex &lt;- relevel(diphs3$Sex, ref = &quot;M&quot;)</code></pre>
+<p>Now onto some modelling.</p>
+</div>
+<div id="face" class="section level1">
+<h1>FACE</h1>
+<p>Make the subset:</p>
+<pre class="r"><code>face &lt;- diphs3 %&gt;% filter(sound_label == &quot;face&quot;)</code></pre>
+<div id="face-f1" class="section level2">
+<h2>FACE F1</h2>
+<p>N.B. in the real analysis, I checked the distribution of the dependent and independent variables, looked for outliers and so on… I am not putting all of that here because it would make the page pretty long :)</p>
+<p>OK, now we should probably set some priors.</p>
+<p>Check distribution of each of these to know what is a normal range:</p>
+<pre class="r"><code>ggplot(face, aes(x=Log_dur_z)) + geom_histogram(bins = 100)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(face, aes(x=age, y = normF1_20, fill = Sex)) + geom_violin()</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<p>Find out what priors we need:</p>
+<pre class="r"><code>get_prior(normF1_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face)</code></pre>
+<pre><code>##                  prior     class          coef       group resp dpar nlpar
+## 1                              b                                          
+## 2                              b      agechild                            
+## 3                              b agechild:SexF                            
+## 4                              b     Log_dur_z                            
+## 5                              b          SexF                            
+## 6  student_t(3, 1, 10) Intercept                                          
+## 7  student_t(3, 0, 10)        sd                                          
+## 8                             sd               participant                
+## 9                             sd     Intercept participant                
+## 10                            sd                      word                
+## 11                            sd     Intercept        word                
+## 12 student_t(3, 0, 10)     sigma                                          
+##    bound
+## 1       
+## 2       
+## 3       
+## 4       
+## 5       
+## 6       
+## 7       
+## 8       
+## 9       
+## 10      
+## 11      
+## 12</code></pre>
+<p>Create the priors:</p>
+<pre class="r"><code>priors.1 &lt;- c(set_prior(&quot;normal(1, 0.75)&quot;, class = &quot;Intercept&quot;),
+              set_prior(&quot;normal(0, 0.1)&quot;, class = &quot;b&quot;, coef = &quot;Log_dur_z&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;agechild&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;SexF&quot;),
+              set_prior(&quot;normal(0, 1)&quot;, class = &quot;b&quot;, coef = &quot;agechild:SexF&quot;), #2*age effect to allow for complete reversal
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;participant&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;word&quot;)
+              )</code></pre>
+<p>And make the model:</p>
+<pre class="r"><code>model1.1 &lt;- brm(normF1_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face, prior = priors.1)</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;a0e0ae155a974d155793524f8a298c1a&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0.000358 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.58 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 21.4824 seconds (Warm-up)
+## Chain 1:                10.5901 seconds (Sampling)
+## Chain 1:                32.0725 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;a0e0ae155a974d155793524f8a298c1a&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0.000186 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.86 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 20.8492 seconds (Warm-up)
+## Chain 2:                5.55025 seconds (Sampling)
+## Chain 2:                26.3995 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;a0e0ae155a974d155793524f8a298c1a&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0.000184 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 1.84 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 20.4095 seconds (Warm-up)
+## Chain 3:                10.5894 seconds (Sampling)
+## Chain 3:                30.9989 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;a0e0ae155a974d155793524f8a298c1a&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0.000273 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 2.73 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 21.1059 seconds (Warm-up)
+## Chain 4:                5.63553 seconds (Sampling)
+## Chain 4:                26.7415 seconds (Total)
+## Chain 4:</code></pre>
+<p>Have a look at the model summary:</p>
+<pre class="r"><code>summary(model1.1)</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: normF1_20 ~ Log_dur_z + age * Sex + (1 | participant) + (1 | word) 
+##    Data: face (Number of observations: 1935) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~participant (Number of levels: 28) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.06      0.01     0.05     0.08       1122 1.00
+## 
+## ~word (Number of levels: 246) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.04      0.00     0.03     0.05       1452 1.00
+## 
+## Population-Level Effects: 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept         1.02      0.03     0.97     1.07        731 1.00
+## Log_dur_z         0.04      0.00     0.03     0.04       6245 1.00
+## agechild         -0.06      0.03    -0.12     0.01        804 1.00
+## SexF             -0.00      0.03    -0.07     0.06        915 1.00
+## agechild:SexF    -0.01      0.05    -0.10     0.09        825 1.00
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma     0.12      0.00     0.11     0.12       4489 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>This summary indicates that:</p>
+<ul>
+<li><p>A 1 Z-score increase in duration predicts a 0.04 increase in F1 at 20%. 95% of the posterior distribution is between 0.03 and 0.04 for this coefficient.</p></li>
+<li><p>Although the coefficient for the age variable is larger in absolute terms than that for duration, the posterior distribution is flatter, and the 95% credible interval includes 0.</p></li>
+<li><p>The posterior on the coefficient for Sex is centred at 0! So there really seems to be no effect of Sex. Similarly, the coefficient for the age-sex interaction is not very impressive.</p></li>
+</ul>
+<p>A different kind of output:</p>
+<pre class="r"><code>tidy_stan(model1.1, prob=0.89, type=&quot;all&quot;, digits=4)</code></pre>
+<pre><code>## Warning in stddev/sqrt(ess): longer object length is not a multiple of
+## shorter object length</code></pre>
+<pre><code>## 
+## # Summary Statistics of Stan-Model
+## 
+## ## Fixed effects:
+## 
+##                estimate std.error          HDI(89%)  ratio   rhat   mcse
+##  Intercept       1.0172    0.0250 [ 0.9783  1.0579] 0.1828 1.0020 0.0009
+##  Log_dur_z       0.0382    0.0034 [ 0.0328  0.0436] 1.5613 0.9997 0.0000
+##  Log_dur_z       0.0382    0.0034 [ 0.0328  0.0436] 1.5613 0.9997 0.0000
+##  agechild       -0.0562    0.0343 [-0.1083 -0.0028] 0.2010 1.0013 0.0012
+##  SexF           -0.0001    0.0325 [-0.0560  0.0509] 0.2286 1.0032 0.0011
+##  agechild.SexF  -0.0149    0.0464 [-0.0865  0.0621] 0.2061 1.0017 0.0017
+## 
+## ## Random effect (Intercept: participant)
+## 
+##                        estimate std.error          HDI(89%)  ratio   rhat
+##  participant.Amanda      0.0392    0.0263 [-0.0029  0.0805] 0.3027 1.0035
+##  participant.CB         -0.0224    0.0263 [-0.0652  0.0215] 0.2139 1.0002
+##  participant.Chantelle  -0.0776    0.0262 [-0.1168 -0.0336] 0.2832 1.0047
+##  participant.ChrisB     -0.0757    0.0265 [-0.1174 -0.0364] 0.2759 1.0051
+##  participant.F1          0.0462    0.0291 [-0.0048  0.0907] 0.3975 1.0027
+##  participant.F10        -0.0217    0.0250 [-0.0649  0.0159] 0.2887 1.0043
+##  participant.F3         -0.0726    0.0261 [-0.1155 -0.0316] 0.2819 1.0039
+##  participant.F4          0.0862    0.0290 [ 0.0381  0.1332] 0.3503 1.0035
+##  participant.F7          0.0618    0.0284 [ 0.0160  0.1073] 0.3506 1.0028
+##  participant.F8         -0.0961    0.0266 [-0.1431 -0.0541] 0.3264 1.0039
+##  participant.F9          0.0077    0.0266 [-0.0344  0.0500] 0.2956 1.0044
+##  participant.Ibrahim    -0.0321    0.0265 [-0.0729  0.0130] 0.2187 1.0014
+##  participant.Jessica     0.0590    0.0266 [ 0.0157  0.1008] 0.3056 1.0044
+##  participant.Lola       -0.0168    0.0255 [-0.0556  0.0251] 0.2638 1.0052
+##  participant.Lucy        0.0714    0.0274 [ 0.0268  0.1129] 0.3173 1.0053
+##  participant.M1          0.0579    0.0272 [ 0.0174  0.1033] 0.3518 1.0016
+##  participant.M3         -0.0254    0.0280 [-0.0678  0.0203] 0.3854 1.0029
+##  participant.M4          0.0726    0.0256 [ 0.0322  0.1133] 0.3107 1.0025
+##  participant.M5         -0.0363    0.0264 [-0.0765  0.0063] 0.3232 1.0023
+##  participant.M6         -0.0942    0.0273 [-0.1394 -0.0543] 0.3332 1.0020
+##  participant.M7          0.0113    0.0277 [-0.0317  0.0570] 0.3675 1.0018
+##  participant.M8          0.0142    0.0272 [-0.0268  0.0611] 0.3673 1.0016
+##  participant.Matisse     0.0216    0.0266 [-0.0214  0.0648] 0.2150 1.0019
+##  participant.Omar       -0.0136    0.0279 [-0.0586  0.0295] 0.2333 1.0012
+##  participant.Sami        0.0430    0.0271 [-0.0017  0.0856] 0.2030 1.0013
+##  participant.Shantel     0.0036    0.0265 [-0.0395  0.0457] 0.2916 1.0048
+##  participant.Tariq       0.0322    0.0276 [-0.0129  0.0746] 0.2123 1.0001
+##  participant.ZR         -0.0249    0.0276 [-0.0682  0.0215] 0.2378 1.0008
+##   mcse
+##  9e-04
+##  8e-04
+##  8e-04
+##  7e-04
+##  9e-04
+##  8e-04
+##  7e-04
+##  8e-04
+##  8e-04
+##  8e-04
+##  9e-04
+##  8e-04
+##  8e-04
+##  7e-04
+##  7e-04
+##  7e-04
+##  8e-04
+##  7e-04
+##  7e-04
+##  7e-04
+##  7e-04
+##  9e-04
+##  9e-04
+##  1e-03
+##  8e-04
+##  9e-04
+##  9e-04
+##  4e-04
+## 
+## ## Random effect (Intercept: word...APRIL..)
+## 
+##                 estimate std.error          HDI(89%) ratio   rhat  mcse
+##  word...APRIL..  -0.0152    0.0396 [-0.0803  0.0479] 1.263 0.9995 5e-04
+## 
+## ## Random effect (Intercept: word...EIGHTEENTH..)
+## 
+##                      estimate std.error          HDI(89%)  ratio   rhat
+##  word...EIGHTEENTH..  -0.0022    0.0373 [-0.0680  0.0569] 1.3805 0.9995
+##   mcse
+##  5e-04
+## 
+## ## Random effect (Intercept: word...FACE..)
+## 
+##                estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word...FACE..  -0.0398    0.0374 [-0.1004  0.0207] 1.3248 0.9994 6e-04
+## 
+## ## Random effect (Intercept: word)
+## 
+##                     estimate std.error          HDI(89%)  ratio   rhat
+##  word.A               0.0075    0.0183 [-0.0214  0.0352] 1.1016 1.0006
+##  word.ABBREVIATIONS  -0.0125    0.0387 [-0.0751  0.0529] 1.3382 0.9999
+##  word.ABLE           -0.0105    0.0365 [-0.0702  0.0495] 1.3967 0.9999
+##  word.ACE            -0.0006    0.0391 [-0.0643  0.0605] 1.4880 0.9994
+##  word.ACHE           -0.0199    0.0384 [-0.0817  0.0415] 1.2940 0.9995
+##  word.ACQUAINTANCES  -0.0075    0.0397 [-0.0724  0.0539] 1.6588 0.9992
+##  word.AEROPLANE      -0.0005    0.0374 [-0.0597  0.0613] 1.2354 1.0001
+##  word.AGE            -0.0786    0.0292 [-0.1229 -0.0298] 1.3926 0.9994
+##  word.ALWAYS         -0.0289    0.0362 [-0.0855  0.0355] 1.4953 0.9994
+##  word.AMAZINGLY      -0.0105    0.0409 [-0.0714  0.0549] 1.3893 1.0011
+##  word.ANYWAY         -0.0036    0.0366 [-0.0591  0.0574] 1.4745 0.9996
+##  word.ANYWAYS        -0.0209    0.0387 [-0.0822  0.0426] 1.4828 0.9999
+##  word.APRIL           0.0054    0.0328 [-0.0488  0.0548] 1.5204 0.9997
+##  word.ASIAN          -0.0013    0.0372 [-0.0621  0.0553] 1.1840 0.9998
+##  word.ATE             0.0024    0.0371 [-0.0580  0.0634] 1.3690 0.9992
+##  word.AWAY            0.0086    0.0224 [-0.0282  0.0454] 1.2594 0.9998
+##  word.BABIES         -0.0017    0.0395 [-0.0679  0.0614] 1.4581 0.9994
+##  word.BABY           -0.0428    0.0157 [-0.0675 -0.0184] 1.1766 1.0003
+##  word.BAIT            0.0014    0.0385 [-0.0599  0.0635] 1.4595 1.0000
+##  word.BASED           0.0094    0.0378 [-0.0478  0.0766] 1.2815 0.9992
+##  word.BASICALLY      -0.0190    0.0178 [-0.0468  0.0090] 1.2099 1.0004
+##  word.BECAME         -0.0070    0.0391 [-0.0679  0.0571] 1.4088 0.9996
+##  word.BEHAVIOR        0.0022    0.0383 [-0.0598  0.0646] 1.1482 1.0014
+##  word.BEHAVIOUR      -0.0202    0.0378 [-0.0842  0.0370] 1.3155 0.9994
+##  word.BIRTHDAY       -0.0279    0.0313 [-0.0771  0.0210] 1.5115 0.9996
+##  word.BLAME           0.0059    0.0394 [-0.0552  0.0765] 1.6427 0.9996
+##  word.BRAVE           0.0160    0.0400 [-0.0502  0.0786] 1.4306 1.0000
+##  word.BREAK           0.0118    0.0351 [-0.0424  0.0723] 1.3312 1.0008
+##  word.BREAKING       -0.0071    0.0410 [-0.0749  0.0563] 1.7384 0.9993
+##  word.CAKE            0.0758    0.0173 [ 0.0481  0.1035] 1.2464 0.9998
+##  word.CAME           -0.0241    0.0178 [-0.0510  0.0042] 1.3530 0.9995
+##  word.CAPABLE        -0.0005    0.0389 [-0.0575  0.0622] 1.5078 1.0006
+##  word.CASE           -0.0155    0.0380 [-0.0764  0.0475] 1.3174 1.0003
+##  word.CELEBRATE       0.0026    0.0390 [-0.0605  0.0652] 1.5479 0.9997
+##  word.CELEBRATING     0.0113    0.0406 [-0.0487  0.0803] 1.4753 0.9995
+##  word.CHANGE          0.0045    0.0234 [-0.0325  0.0432] 1.6300 0.9995
+##  word.CHANGED         0.0006    0.0379 [-0.0626  0.0601] 1.5007 0.9996
+##  word.CHANGES         0.0003    0.0397 [-0.0645  0.0631] 1.3449 0.9998
+##  word.CHASE          -0.0017    0.0370 [-0.0657  0.0558] 1.3455 1.0000
+##  word.CHASED         -0.0139    0.0378 [-0.0726  0.0489] 1.2754 1.0006
+##  word.CHASING        -0.0032    0.0375 [-0.0662  0.0622] 1.5578 0.9996
+##  word.CLAIM          -0.0031    0.0399 [-0.0677  0.0597] 1.6166 0.9993
+##  word.CLAIMED         0.0369    0.0384 [-0.0256  0.0974] 1.2407 0.9998
+##  word.CLAIMING        0.0168    0.0384 [-0.0442  0.0816] 1.2496 0.9996
+##  word.COMMUNICATE     0.0013    0.0391 [-0.0634  0.0652] 1.4040 0.9992
+##  word.COMMUNICATION  -0.0056    0.0385 [-0.0644  0.0615] 1.4917 0.9991
+##  word.CONVERSATION   -0.0254    0.0361 [-0.0828  0.0350] 1.4567 0.9993
+##  word.CONVERSATIONS  -0.0150    0.0402 [-0.0843  0.0459] 1.4588 1.0003
+##  word.CRAZY           0.0691    0.0285 [ 0.0230  0.1127] 1.1307 0.9995
+##  word.CREATE          0.0142    0.0412 [-0.0500  0.0780] 1.3446 1.0002
+##  word.CREATED        -0.0205    0.0404 [-0.0859  0.0439] 1.3523 0.9995
+##  word.CREATING       -0.0074    0.0381 [-0.0711  0.0583] 1.3166 0.9993
+##  word.CUPCAKE        -0.0283    0.0371 [-0.0891  0.0309] 1.2370 1.0003
+##  word.DAISY          -0.0296    0.0330 [-0.0840  0.0283] 1.1934 1.0005
+##  word.DATE           -0.0078    0.0361 [-0.0625  0.0546] 1.5721 0.9995
+##  word.DATES           0.0010    0.0350 [-0.0608  0.0535] 1.5614 0.9992
+##  word.DAY            -0.0097    0.0201 [-0.0380  0.0245] 1.0387 1.0000
+##  word.DAYLIGHT        0.0178    0.0397 [-0.0485  0.0773] 1.1730 0.9995
+##  word.DAYS           -0.0640    0.0210 [-0.0961 -0.0296] 1.3351 0.9998
+##  word.DISABLED       -0.0113    0.0376 [-0.0719  0.0478] 1.5072 0.9997
+##  word.DONATED         0.0002    0.0400 [-0.0636  0.0654] 1.4624 0.9995
+##  word.EIGHT           0.0697    0.0187 [ 0.0433  0.1020] 1.5853 0.9997
+##  word.EIGHTH         -0.0281    0.0373 [-0.0903  0.0342] 1.5947 0.9995
+##  word.EIGHTY         -0.0104    0.0379 [-0.0721  0.0477] 1.6076 0.9992
+##  word.ELABORATE       0.0032    0.0392 [-0.0600  0.0672] 1.3821 0.9998
+##  word.ELABORATED     -0.0059    0.0393 [-0.0665  0.0593] 1.2843 0.9998
+##  word.ESCALATES      -0.0190    0.0388 [-0.0781  0.0433] 1.2637 1.0003
+##  word.ESCAPED        -0.0738    0.0262 [-0.1175 -0.0342] 1.3655 0.9999
+##  word.ESTATE         -0.0079    0.0377 [-0.0669  0.0563] 1.1486 1.0002
+##  word.EXPLAIN         0.0026    0.0367 [-0.0595  0.0594] 1.4554 0.9995
+##  word.FACE            0.0044    0.0228 [-0.0352  0.0374] 1.4110 0.9999
+##  word.FACED          -0.0043    0.0399 [-0.0672  0.0610] 1.5544 0.9996
+##  word.FACES          -0.0025    0.0383 [-0.0709  0.0579] 1.3199 0.9994
+##  word.FAKE            0.0158    0.0329 [-0.0339  0.0693] 1.5249 0.9996
+##  word.FAMOUS          0.0149    0.0397 [-0.0477  0.0767] 1.5657 1.0005
+##  word.FAVORITE       -0.0068    0.0404 [-0.0714  0.0586] 1.2813 0.9995
+##  word.FAVOURITE       0.0014    0.0371 [-0.0591  0.0581] 1.4838 0.9993
+##  word.FLAMES         -0.0138    0.0374 [-0.0760  0.0421] 1.3774 0.9995
+##  word.FLIRTATIOUS     0.0053    0.0405 [-0.0619  0.0679] 1.4065 0.9992
+##  word.FRIDAY         -0.0145    0.0404 [-0.0766  0.0525] 1.6307 0.9996
+##  word.GAME           -0.0332    0.0267 [-0.0739  0.0099] 1.3792 1.0001
+##  word.GAMES          -0.0189    0.0368 [-0.0739  0.0438] 1.4278 0.9997
+##  word.GATE            0.0017    0.0205 [-0.0305  0.0355] 1.2435 1.0000
+##  word.GAVE           -0.0786    0.0227 [-0.1156 -0.0418] 1.3906 0.9997
+##  word.GAY            -0.0151    0.0271 [-0.0557  0.0299] 1.4914 0.9994
+##  word.GAYS           -0.0055    0.0398 [-0.0703  0.0611] 1.2833 1.0006
+##  word.GENERATION      0.0104    0.0370 [-0.0495  0.0689] 1.1976 0.9996
+##  word.GREAT           0.0286    0.0316 [-0.0212  0.0787] 1.3975 0.9993
+##  word.GRENADA         0.0345    0.0384 [-0.0292  0.0925] 1.1124 0.9994
+##  word.GREY            0.0327    0.0248 [-0.0077  0.0753] 1.3619 0.9997
+##  word.H              -0.0174    0.0384 [-0.0767  0.0437] 1.4104 1.0000
+##  word.HAIRSPRAY       0.0157    0.0409 [-0.0472  0.0844] 1.5895 0.9995
+##  word.HATE           -0.0320    0.0350 [-0.0884  0.0243] 1.2576 1.0000
+##  word.HATED          -0.0323    0.0308 [-0.0815  0.0206] 1.4768 0.9998
+##  word.HAY             0.1092    0.0229 [ 0.0724  0.1454] 0.8620 1.0003
+##  word.HAYS            0.0013    0.0393 [-0.0634  0.0652] 1.2229 0.9998
+##  word.HEY             0.0553    0.0360 [-0.0038  0.1109] 1.0998 0.9998
+##  word.HEYA            0.0382    0.0409 [-0.0249  0.1053] 1.1467 0.9995
+##  word.HOLIDAY         0.0177    0.0373 [-0.0431  0.0748] 1.4619 0.9996
+##  word.HOLIDAYS       -0.0053    0.0350 [-0.0619  0.0541] 1.4203 0.9992
+##  word.INDICATE        0.0043    0.0399 [-0.0654  0.0623] 1.4584 0.9992
+##  word.INTEGRATED     -0.0107    0.0421 [-0.0754  0.0554] 1.3143 1.0000
+##  word.INVADING       -0.0032    0.0398 [-0.0675  0.0625] 1.5985 0.9999
+##  word.ISOLATION      -0.0158    0.0384 [-0.0782  0.0469] 1.3511 0.9993
+##  word.ISRAELI        -0.0001    0.0399 [-0.0669  0.0615] 1.2375 0.9996
+##  word.J              -0.0150    0.0335 [-0.0673  0.0421] 1.5423 0.9998
+##  word.JAMAICAN        0.0172    0.0371 [-0.0409  0.0789] 1.3439 1.0005
+##  word.K              -0.0113    0.0373 [-0.0716  0.0495] 1.4956 1.0004
+##  word.KAY            -0.0084    0.0276 [-0.0520  0.0369] 1.4422 0.9995
+##  word.LADIES          0.0084    0.0396 [-0.0556  0.0720] 1.2876 0.9994
+##  word.LADY            0.0077    0.0248 [-0.0330  0.0495] 1.4452 0.9998
+##  word.LATE            0.0467    0.0338 [-0.0069  0.1026] 1.0993 0.9996
+##  word.LATER           0.0070    0.0243 [-0.0356  0.0438] 1.5901 0.9997
+##  word.LAYING          0.0013    0.0401 [-0.0622  0.0678] 1.6434 0.9996
+##  word.MADE            0.0077    0.0241 [-0.0330  0.0446] 1.3601 1.0003
+##  word.MAIN            0.0072    0.0382 [-0.0625  0.0668] 1.5641 0.9997
+##  word.MAINLY          0.0189    0.0339 [-0.0344  0.0707] 1.6934 0.9991
+##  word.MAINSTREAM     -0.0011    0.0392 [-0.0673  0.0590] 1.4171 0.9994
+##  word.MAISONETTE      0.0089    0.0402 [-0.0552  0.0717] 1.4019 0.9992
+##  word.MAJOR          -0.0130    0.0379 [-0.0751  0.0453] 1.5192 0.9994
+##  word.MAJORLY        -0.0145    0.0361 [-0.0752  0.0456] 1.0622 0.9995
+##  word.MAKE            0.0158    0.0199 [-0.0146  0.0484] 1.3887 0.9997
+##  word.MAKES          -0.0154    0.0320 [-0.0717  0.0311] 1.1704 0.9996
+##  word.MAKING          0.0234    0.0300 [-0.0265  0.0716] 1.2838 0.9994
+##  word.MATES           0.0038    0.0399 [-0.0597  0.0696] 1.2941 1.0005
+##  word.MAY             0.0061    0.0395 [-0.0595  0.0706] 1.4318 1.0007
+##  word.MAYBE          -0.0035    0.0252 [-0.0424  0.0406] 1.3133 0.9997
+##  word.MEDICATION     -0.0149    0.0393 [-0.0781  0.0491] 1.2673 1.0006
+##  word.MISTAKE        -0.0309    0.0380 [-0.0933  0.0277] 1.1020 0.9997
+##  word.MISTAKES       -0.0229    0.0367 [-0.0824  0.0322] 1.4169 0.9997
+##  word.MKAY            0.0124    0.0355 [-0.0478  0.0688] 1.6222 0.9998
+##  word.MONDAY          0.0140    0.0356 [-0.0380  0.0717] 1.4696 0.9993
+##  word.NAKED           0.0142    0.0403 [-0.0511  0.0789] 1.2374 1.0002
+##  word.NAME            0.0139    0.0240 [-0.0225  0.0544] 1.3300 0.9997
+##  word.NAMES           0.0322    0.0353 [-0.0244  0.0907] 1.4779 0.9993
+##  word.NAVY           -0.0342    0.0365 [-0.0887  0.0231] 1.4001 0.9998
+##  word.NEIGHBORING    -0.0044    0.0386 [-0.0657  0.0617] 1.5017 0.9991
+##  word.NEIGHBOUR      -0.0249    0.0370 [-0.0845  0.0345] 1.4276 0.9994
+##  word.NEIGHBOURS      0.0022    0.0384 [-0.0608  0.0620] 1.2960 0.9997
+##  word.NICKNAME        0.0088    0.0411 [-0.0546  0.0728] 1.4225 0.9996
+##  word.NOWADAYS       -0.0291    0.0339 [-0.0822  0.0230] 1.4497 0.9993
+##  word.OCCASIONS      -0.0045    0.0393 [-0.0681  0.0618] 1.4184 1.0002
+##  word.OKAY           -0.0110    0.0114 [-0.0309  0.0059] 0.8816 1.0008
+##  word.ORIGINATORS     0.0244    0.0418 [-0.0419  0.0871] 1.4781 0.9991
+##  word.OVERRATED      -0.0042    0.0398 [-0.0662  0.0609] 1.2011 0.9993
+##  word.PAGE            0.0380    0.0376 [-0.0199  0.1013] 1.5211 0.9996
+##  word.PAGES          -0.0052    0.0408 [-0.0684  0.0596] 1.4969 0.9994
+##  word.PAID            0.0165    0.0396 [-0.0463  0.0816] 1.2738 0.9996
+##  word.PAINT           0.0222    0.0353 [-0.0370  0.0812] 1.1103 0.9997
+##  word.PAINTED        -0.0039    0.0385 [-0.0623  0.0635] 1.4547 0.9993
+##  word.PAINTING       -0.0169    0.0372 [-0.0768  0.0444] 1.3472 0.9993
+##  word.PAPER           0.0151    0.0288 [-0.0299  0.0614] 1.3983 0.9999
+##  word.PAY            -0.0130    0.0327 [-0.0625  0.0386] 1.3777 0.9994
+##  word.PAYING         -0.0027    0.0379 [-0.0655  0.0536] 1.3781 0.9998
+##  word.PLACE           0.0308    0.0285 [-0.0142  0.0762] 1.4691 0.9996
+##  word.PLACES         -0.0007    0.0396 [-0.0651  0.0626] 1.4201 0.9994
+##  word.PLATE           0.0066    0.0389 [-0.0592  0.0683] 1.3483 1.0001
+##  word.PLAY            0.0434    0.0247 [ 0.0025  0.0813] 1.1169 1.0012
+##  word.PLAYED          0.0497    0.0348 [-0.0064  0.1065] 1.2713 0.9994
+##  word.PLAYER         -0.0020    0.0388 [-0.0651  0.0574] 1.3346 0.9996
+##  word.PLAYING         0.0314    0.0328 [-0.0187  0.0819] 1.2436 0.9996
+##  word.PLAYS          -0.0028    0.0403 [-0.0691  0.0592] 1.2260 0.9996
+##  word.PLAYTIME       -0.0092    0.0347 [-0.0638  0.0501] 1.4336 1.0001
+##  word.PORTRAY        -0.0186    0.0392 [-0.0782  0.0431] 1.2678 0.9997
+##  word.PRAY            0.0111    0.0393 [-0.0483  0.0774] 1.3987 0.9996
+##  word.PRAYED          0.0079    0.0412 [-0.0595  0.0710] 1.6554 0.9993
+##  word.PRAYING         0.0043    0.0396 [-0.0616  0.0644] 1.3773 0.9997
+##  word.RACE            0.0072    0.0352 [-0.0480  0.0635] 1.5253 0.9996
+##  word.RACIAL          0.0021    0.0398 [-0.0633  0.0635] 1.6335 0.9992
+##  word.RACING          0.0273    0.0242 [-0.0139  0.0625] 1.2416 0.9997
+##  word.RACISM         -0.0100    0.0408 [-0.0726  0.0584] 1.4287 0.9993
+##  word.RACIST         -0.0032    0.0302 [-0.0475  0.0468] 1.6040 0.9998
+##  word.RAIN            0.0368    0.0396 [-0.0234  0.1054] 1.2714 1.0012
+##  word.RAINBOW        -0.0177    0.0386 [-0.0800  0.0448] 1.4051 1.0002
+##  word.RAINY          -0.0199    0.0365 [-0.0749  0.0416] 1.2836 0.9997
+##  word.RAISED         -0.0164    0.0363 [-0.0772  0.0388] 1.1714 1.0005
+##  word.RAISING        -0.0056    0.0265 [-0.0448  0.0355] 1.2974 1.0003
+##  word.RAPE            0.0062    0.0399 [-0.0589  0.0690] 1.3361 1.0010
+##  word.RELATED        -0.0123    0.0403 [-0.0768  0.0491] 1.4848 1.0001
+##  word.RELATIONSHIP   -0.0102    0.0318 [-0.0643  0.0427] 1.5854 0.9996
+##  word.RETALIATING     0.0000    0.0404 [-0.0628  0.0653] 1.1963 1.0000
+##  word.ROLLERBLADES    0.0117    0.0378 [-0.0460  0.0714] 1.4441 1.0001
+##  word.SAFE           -0.0140    0.0348 [-0.0677  0.0411] 1.4526 0.9998
+##  word.SAFETY         -0.0218    0.0263 [-0.0656  0.0191] 1.3143 0.9997
+##  word.SAINSBURYS     -0.0015    0.0407 [-0.0654  0.0632] 1.3554 0.9994
+##  word.SAKE           -0.0228    0.0382 [-0.0836  0.0387] 1.5103 0.9993
+##  word.SAME            0.0312    0.0131 [ 0.0106  0.0521] 1.1551 1.0000
+##  word.SAVE            0.0054    0.0382 [-0.0555  0.0680] 1.3753 0.9995
+##  word.SAVED          -0.0130    0.0379 [-0.0781  0.0488] 1.1315 1.0008
+##  word.SAY             0.0072    0.0128 [-0.0122  0.0280] 1.0848 0.9999
+##  word.SAYING          0.0340    0.0164 [ 0.0079  0.0590] 1.2471 0.9993
+##  word.SEPARATED       0.0177    0.0403 [-0.0459  0.0829] 1.4603 0.9995
+##  word.SHAKING         0.0040    0.0399 [-0.0621  0.0698] 1.2874 1.0000
+##  word.SHAPE          -0.0051    0.0369 [-0.0629  0.0556] 1.4822 0.9992
+##  word.SITUATION      -0.0140    0.0384 [-0.0754  0.0471] 1.2597 0.9999
+##  word.SITUATIONS     -0.0024    0.0402 [-0.0658  0.0622] 1.4961 0.9993
+##  word.SNAKE           0.0031    0.0405 [-0.0603  0.0681] 1.4516 1.0000
+##  word.SPACE          -0.0123    0.0370 [-0.0707  0.0498] 1.3898 0.9999
+##  word.SPRAYING        0.0027    0.0417 [-0.0593  0.0715] 1.4417 0.9997
+##  word.STAGES         -0.0161    0.0400 [-0.0848  0.0467] 1.2851 0.9998
+##  word.STATEMENT      -0.0095    0.0396 [-0.0697  0.0588] 1.1827 0.9994
+##  word.STATION        -0.0159    0.0389 [-0.0779  0.0489] 1.4279 0.9997
+##  word.STAY            0.0253    0.0237 [-0.0135  0.0646] 1.3109 1.0000
+##  word.STAYED         -0.0292    0.0249 [-0.0666  0.0093] 1.2628 0.9995
+##  word.STAYING         0.0220    0.0351 [-0.0339  0.0782] 1.6662 0.9997
+##  word.STEAK           0.0154    0.0365 [-0.0418  0.0803] 1.3874 0.9992
+##  word.STRAIGHT        0.0415    0.0314 [-0.0097  0.0929] 1.2309 0.9995
+##  word.SUNDAYS        -0.0242    0.0398 [-0.0916  0.0382] 1.2557 0.9994
+##  word.TABLE          -0.0315    0.0205 [-0.0664 -0.0011] 1.2844 0.9999
+##  word.TAKE            0.0309    0.0194 [ 0.0001  0.0601] 1.1779 1.0013
+##  word.TAKEAWAY        0.0046    0.0406 [-0.0608  0.0661] 1.5767 0.9993
+##  word.TAKEN          -0.0036    0.0397 [-0.0718  0.0587] 1.6517 0.9998
+##  word.TAKES          -0.0054    0.0401 [-0.0722  0.0564] 1.3754 0.9998
+##  word.TAKING          0.0234    0.0358 [-0.0327  0.0782] 1.4095 0.9995
+##  word.TEENAGERS       0.0113    0.0398 [-0.0485  0.0755] 1.2639 1.0004
+##  word.THEY           -0.0193    0.0090 [-0.0342 -0.0046] 1.0280 1.0014
+##  word.TODAY          -0.0045    0.0281 [-0.0466  0.0422] 1.5076 0.9999
+##  word.TRAINED         0.0102    0.0405 [-0.0536  0.0752] 1.2704 0.9999
+##  word.TRAINERS        0.0098    0.0424 [-0.0531  0.0761] 1.5957 0.9994
+##  word.TUESDAY         0.0011    0.0412 [-0.0624  0.0662] 1.3461 0.9997
+##  word.VIBRATING      -0.0063    0.0398 [-0.0706  0.0569] 1.5665 0.9998
+##  word.WAIT            0.0451    0.0169 [ 0.0176  0.0726] 0.9723 1.0007
+##  word.WAITED          0.0310    0.0387 [-0.0302  0.0986] 1.4514 0.9992
+##  word.WAITING         0.0067    0.0358 [-0.0501  0.0616] 1.4493 0.9995
+##  word.WAKE            0.0121    0.0385 [-0.0468  0.0749] 1.1594 0.9994
+##  word.WAKES          -0.0079    0.0405 [-0.0703  0.0550] 1.5405 0.9995
+##  word.WASTING        -0.0062    0.0391 [-0.0683  0.0576] 1.3003 0.9994
+##  word.WAY             0.0405    0.0201 [ 0.0089  0.0725] 1.4900 0.9993
+##  word.WAYS            0.0122    0.0390 [-0.0498  0.0734] 1.2589 0.9994
+##  word.WEDNESDAY       0.0051    0.0389 [-0.0602  0.0665] 1.3516 1.0002
+##  word.YESTERDAY      -0.0068    0.0409 [-0.0739  0.0571] 1.2602 0.9992
+##    mcse
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0006
+##  0.0002
+##  0.0005
+##  0.0006
+##  0.0002
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0002
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0005
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0003
+##  0.0003
+##  0.0004
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0004
+##  0.0004
+##  0.0003
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0003
+##  0.0004
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0007
+##  0.0001
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0004
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0003
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0003
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0002
+##  0.0006
+##  0.0006
+##  0.0002
+##  0.0002
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0003
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0002
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0001
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0006
+##  0.0015
+## 
+## ## Random effect (Intercept: word.AIN)
+## 
+##             estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.AIN.T   0.0046    0.0412 [-0.0565  0.0730] 1.4256 0.9995 5e-04
+## 
+## ## Random effect (Intercept: word.ASIAN)
+## 
+##               estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.ASIAN.S  -0.0101    0.0377 [-0.0717  0.0542] 1.6296 0.9997 5e-04
+## 
+## ## Random effect (Intercept: word.BABY)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.BABY.S   -0.012    0.0372 [-0.0751  0.0456] 1.6141 0.9995 5e-04
+## 
+## ## Random effect (Intercept: word.BIRTHDAY)
+## 
+##                  estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.BIRTHDAY.S  -0.0225    0.0373 [-0.0764  0.0387] 1.4394 0.9995 4e-04
+## 
+## ## Random effect (Intercept: word.GATE)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.GATE.S   0.0095    0.0394 [-0.0562  0.0716] 1.3615 0.9997 5e-04
+## 
+## ## Random effect (Intercept: word.INVESTIGATOR)
+## 
+##                      estimate std.error          HDI(89%)  ratio   rhat
+##  word.INVESTIGATOR.S    -0.01    0.0396 [-0.0735  0.0562] 1.6701 0.9997
+##   mcse
+##  6e-04
+## 
+## ## Random effect (Intercept: word.M)
+## 
+##             estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.M.KAY  -0.0227    0.0413 [-0.0885  0.0450] 1.4176 0.9997 6e-04
+## 
+## ## Random effect (Intercept: word.NAME)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.NAME.S   0.0141    0.0396 [-0.0514  0.0799] 1.1897 0.9998 5e-04
+## 
+## ## Random effect (Intercept: word.PAPER)
+## 
+##               estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.PAPER.S   0.0133    0.0383 [-0.0474  0.0748] 1.3776 1.0001 5e-04
+## 
+## ## Random effect (Intercept: word.THEY)
+## 
+##               estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.THEY.D   -0.0153    0.0403 [-0.0833  0.0484] 1.5224 0.9993 5e-04
+##  word.THEY.VE  -0.0081    0.0355 [-0.0652  0.0499] 1.6235 1.0000 5e-04
+## 
+## ## Random effect (Intercept: word.TODAY)
+## 
+##               estimate std.error          HDI(89%) ratio   rhat  mcse
+##  word.TODAY.S  -0.0076    0.0408 [-0.0731  0.0522] 1.407 0.9997 6e-04</code></pre>
+<p>The authors of this other package recommend (a) using 89% credible interval, rather than 95%, for not-so-big data; and (b) looking at where the majority of the posterior distribution lies, not the 95%/89% that is symmetrical about the point estimate. See in the plots how the blue area is not necessarily symmetrical about the point estimate:</p>
+<pre class="r"><code>posterior1 &lt;- as.matrix(model1.1)
+
+#dimnames(posterior)
+mcmc_areas(posterior1,
+           pars = c(&quot;b_Intercept&quot;, 
+                    &quot;b_Log_dur_z&quot;,
+                    &quot;b_agechild&quot;, 
+                    &quot;b_SexF&quot;, 
+                    &quot;b_agechild:SexF&quot;),
+           prob=0.89)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-20-1.png" width="672" /> This plot gives us an idea of how confident to be about the effects of different predictors. Not only are the coefficients for age, sex and their interaction close to zero, the posterior distributions over these parameters are pretty flat compared with e.g. the posterior distribution for duration.</p>
+<p>This tidy_stan also gives us all the random intercepts, which is pretty nice, especially the ones for speakers.</p>
+<div id="plotting-bayesian-output" class="section level3">
+<h3>Plotting Bayesian output</h3>
+<p>Plot marginal effects</p>
+<pre class="r"><code>marg1 &lt;- marginal_effects(model1.1, ask = FALSE)
+
+plot(marg1, plot = FALSE)[[2]]</code></pre>
+<p><img src="icphs_regression_files/figure-html/fig1-1.png" width="672" /></p>
+<p>Save the numbers needed for an interaction plot to a tibble:</p>
+<pre class="r"><code>faceF1 &lt;- as.data.frame(marg1[4])</code></pre>
+<p>Set up the colour palette and the position dodge that we’ll be using for all of these plots:</p>
+<pre class="r"><code>binary &lt;- c(&quot;#E69F00&quot;, &quot;#56B4E9&quot;)
+
+pd &lt;- position_dodge(0.9)</code></pre>
+<pre class="r"><code>o1 &lt;- ggplot(data = face, aes(x = age, y = normF1_20, fill = Sex)) + 
+  geom_violin(color = NA) + 
+  geom_boxplot(width = 0.3, color = &quot;#999999&quot;, position = pd) +
+  theme_minimal() + 
+  scale_fill_manual(values = binary) +
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size = rel(2.5)),
+        legend.text = element_text(size = rel(2.5)),
+        axis.title = element_text(size = rel(3.5)), 
+        axis.text = element_text(size = rel(3)), 
+        plot.title = element_text(size = rel(3.5)), 
+        plot.margin=unit(c(0.7,0.7,0.7,0.7),&quot;cm&quot;)) +
+  labs(x = &quot;Age&quot;, y = &quot;Normalized F1 at 20%&quot;, 
+       title = &quot;FACE: normalized F1 at onset (20%)&quot;)
+
+o1</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+<pre class="r"><code>str(faceF1)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    4 obs. of  13 variables:
+##  $ age.Sex.age        : Factor w/ 2 levels &quot;adolescent&quot;,&quot;child&quot;: 1 1 2 2
+##  $ age.Sex.Sex        : Factor w/ 2 levels &quot;M&quot;,&quot;F&quot;: 1 2 1 2
+##  $ age.Sex.normF1_20  : num  0.986 0.986 0.986 0.986
+##  $ age.Sex.Log_dur_z  : num  -0.00818 -0.00818 -0.00818 -0.00818
+##  $ age.Sex.participant: logi  NA NA NA NA
+##  $ age.Sex.word       : logi  NA NA NA NA
+##  $ age.Sex.cond__     : Factor w/ 1 level &quot;1&quot;: 1 1 1 1
+##  $ age.Sex.effect1__  : Factor w/ 2 levels &quot;adolescent&quot;,&quot;child&quot;: 1 1 2 2
+##  $ age.Sex.effect2__  : Factor w/ 2 levels &quot;M&quot;,&quot;F&quot;: 1 2 1 2
+##  $ age.Sex.estimate__ : num  1.017 1.017 0.961 0.946
+##  $ age.Sex.se__       : num  0.0249 0.0242 0.0244 0.0238
+##  $ age.Sex.lower__    : num  0.968 0.968 0.912 0.899
+##  $ age.Sex.upper__    : num  1.069 1.063 1.007 0.998</code></pre>
+<p>Define columns to keep:</p>
+<pre class="r"><code>keep1 &lt;- c(&quot;age.Sex.age&quot;, &quot;age.Sex.Sex&quot;, &quot;age.Sex.estimate__&quot;, &quot;age.Sex.se__&quot;, &quot;age.Sex.lower__&quot;, &quot;age.Sex.upper__&quot;)</code></pre>
+<p>Perform “select”:</p>
+<pre class="r"><code>faceF1_2 &lt;- faceF1 %&gt;% select(keep1)</code></pre>
+<p>Rename columns:</p>
+<pre class="r"><code>colnames(faceF1_2) &lt;- c(&quot;age&quot;,&quot;Sex&quot;,&quot;normF1_20&quot;, &quot;SE&quot;,&quot;lower&quot;, &quot;upper&quot;)</code></pre>
+<p>Add error bars</p>
+<pre class="r"><code>o2 &lt;- o1 + geom_point(data = faceF1_2, aes(x=age, y=normF1_20, group = Sex),
+                      position = pd,
+                      size = 4) +
+  geom_errorbar(data = faceF1_2, 
+                aes(ymin=lower, ymax=upper), 
+                width=.1,
+                size=1,
+                position = pd)
+
+o2</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-28-1.png" width="768" /></p>
+</div>
+</div>
+<div id="face-trajectory" class="section level2">
+<h2>FACE trajectory</h2>
+<p>As with FACE F1, note that I have done exploratory analysis of the distribution of the dependent variable in relation to its predictors, but I am not going to do all that here because it would take up lots of space…</p>
+<p>Check distribution of TL in relation to duration (log10-transformed and Z-scored), age and sex:</p>
+<pre class="r"><code>ggplot(face, aes(x=Log_dur_z)) + geom_histogram(bins = 100)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(face, aes(x=age, y = norm_TL, fill = Sex)) + geom_violin()</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-29-2.png" width="672" /></p>
+<p>Define the priors:</p>
+<pre class="r"><code>priors2 &lt;- c(set_prior(&quot;normal(0.75, 0.75)&quot;, class = &quot;Intercept&quot;), # set a prior for the intercept
+              set_prior(&quot;normal(0, 2)&quot;, class = &quot;b&quot;, coef = &quot;Log_dur_z&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;agechild&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;SexF&quot;),
+              set_prior(&quot;normal(0, 1.5)&quot;, class = &quot;b&quot;, coef = &quot;agechild:SexF&quot;), #2*age effect to allow for complete reversal
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;participant&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;word&quot;)
+              )</code></pre>
+<p>And build the model:</p>
+<pre class="r"><code>model2 &lt;- brm(norm_TL ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face, prior = priors2)</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;7b293a91127b74207a6959a0792c2ea1&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0.000328 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 3.28 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 17.9943 seconds (Warm-up)
+## Chain 1:                5.63237 seconds (Sampling)
+## Chain 1:                23.6266 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;7b293a91127b74207a6959a0792c2ea1&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0.000178 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 1.78 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 17.7305 seconds (Warm-up)
+## Chain 2:                5.90697 seconds (Sampling)
+## Chain 2:                23.6375 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;7b293a91127b74207a6959a0792c2ea1&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0.000189 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 1.89 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 18.4464 seconds (Warm-up)
+## Chain 3:                5.64927 seconds (Sampling)
+## Chain 3:                24.0957 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;7b293a91127b74207a6959a0792c2ea1&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0.000186 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 1.86 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 17.4247 seconds (Warm-up)
+## Chain 4:                3.9463 seconds (Sampling)
+## Chain 4:                21.371 seconds (Total)
+## Chain 4:</code></pre>
+<p>Check the model summary</p>
+<pre class="r"><code>summary(model2)</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: norm_TL ~ Log_dur_z + age * Sex + (1 | participant) + (1 | word) 
+##    Data: face (Number of observations: 1935) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~participant (Number of levels: 28) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.04      0.01     0.03     0.06       1696 1.00
+## 
+## ~word (Number of levels: 246) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.05      0.01     0.03     0.06       1314 1.00
+## 
+## Population-Level Effects: 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept         0.33      0.02     0.29     0.36       1896 1.00
+## Log_dur_z         0.06      0.00     0.05     0.07       5523 1.00
+## agechild          0.07      0.03     0.02     0.12       1628 1.00
+## SexF              0.07      0.03     0.02     0.12       1690 1.00
+## agechild:SexF    -0.10      0.04    -0.18    -0.03       1471 1.00
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma     0.16      0.00     0.16     0.17       5706 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>So, as regards the trajectory of FACE:</p>
+<ul>
+<li><p>longer duration = greater Trajectory Length i.e. more movement in the diphthong. This is to be expected really with diphthongs. The 95% credible interval is narrow, bounded at 0.05 and 0.07, so we are pretty confident that duration has a positive relationship with TL.</p></li>
+<li><p>Being a child (male) as opposed to adolescent (male) also predicts longer trajectory. The coefficients and 95% credible intervals are actually identical for the age and sex predictors. The 95% credible interval for each is (0.02, 0.12).</p></li>
+<li><p>There is an interaction of age and sex that counterbalances the age effect. 0.07 + -0.1 = -0.03, so the difference between adolescent males and female children is estimated at -0.03? i.e. female children have smaller TL i.e. are more monophthongal than male adolescents?</p></li>
+</ul>
+<p>The tidy_stan summary:</p>
+<pre class="r"><code>tidy_stan(model2, prob = 0.89, type = &quot;all&quot;, digits = 8)</code></pre>
+<pre><code>## Warning in stddev/sqrt(ess): longer object length is not a multiple of
+## shorter object length</code></pre>
+<pre><code>## 
+## # Summary Statistics of Stan-Model
+## 
+## ## Fixed effects:
+## 
+##                   estimate  std.error                  HDI(89%)     ratio
+##  Intercept      0.32515286 0.01756732 [ 0.29506057  0.35268462] 0.4740837
+##  Log_dur_z      0.05803424 0.00472117 [ 0.04996918  0.06523653] 1.3806564
+##  Log_dur_z      0.05803424 0.00472117 [ 0.04996918  0.06523653] 1.3806564
+##  agechild       0.07262837 0.02496942 [ 0.03314407  0.11362892] 0.4070939
+##  SexF           0.07285438 0.02443631 [ 0.03104505  0.11168720] 0.4223833
+##  agechild.SexF -0.10314385 0.03399426 [-0.16179584 -0.04749239] 0.3677926
+##       rhat       mcse
+##  1.0009332 0.00042287
+##  0.9992142 0.00006405
+##  0.9992142 0.00006405
+##  0.9993426 0.00063493
+##  1.0004921 0.00061491
+##  0.9994097 0.00093757
+## 
+## ## Random effect (Intercept: participant)
+## 
+##                           estimate  std.error                  HDI(89%)
+##  participant.Amanda     0.00774523 0.02308346 [-0.02804716  0.04573285]
+##  participant.CB        -0.06947155 0.02361331 [-0.10775410 -0.03372772]
+##  participant.Chantelle -0.02954973 0.02176910 [-0.06697934  0.00370484]
+##  participant.ChrisB    -0.00355290 0.02139751 [-0.03947001  0.02919098]
+##  participant.F1         0.00718465 0.02680893 [-0.03585146  0.04957745]
+##  participant.F10       -0.02363092 0.02136191 [-0.05799224  0.01070667]
+##  participant.F3         0.00080254 0.02221716 [-0.03334664  0.03648289]
+##  participant.F4         0.01527848 0.02595264 [-0.02711121  0.05810326]
+##  participant.F7        -0.00096488 0.02490135 [-0.04474035  0.03715489]
+##  participant.F8        -0.03525681 0.02425500 [-0.07454794  0.00345518]
+##  participant.F9         0.03746279 0.02351025 [-0.00076070  0.07493039]
+##  participant.Ibrahim    0.05317428 0.02171733 [ 0.01732499  0.08946752]
+##  participant.Jessica    0.04084583 0.02256481 [ 0.00338117  0.07792902]
+##  participant.Lola      -0.02576065 0.02078048 [-0.06028334  0.00702715]
+##  participant.Lucy      -0.03642124 0.02264860 [-0.07673170 -0.00064967]
+##  participant.M1         0.00814716 0.02375069 [-0.02866253  0.04718489]
+##  participant.M3         0.01960888 0.02536898 [-0.01878263  0.06136336]
+##  participant.M4        -0.02349060 0.02099022 [-0.05793983  0.01172762]
+##  participant.M5         0.05828572 0.02348473 [ 0.02026061  0.09626538]
+##  participant.M6        -0.02173458 0.02399985 [-0.05952990  0.01780208]
+##  participant.M7        -0.01142205 0.02519224 [-0.05488841  0.02720432]
+##  participant.M8        -0.02657265 0.02460567 [-0.07054753  0.01187103]
+##  participant.Matisse   -0.00273169 0.02246067 [-0.03899099  0.03315855]
+##  participant.Omar      -0.03735201 0.02331394 [-0.07502047  0.00109644]
+##  participant.Sami       0.03568153 0.02219713 [-0.00107370  0.07098643]
+##  participant.Shantel    0.05081809 0.02407599 [ 0.01275908  0.08947232]
+##  participant.Tariq      0.03593762 0.02163564 [-0.00046498  0.07067225]
+##  participant.ZR        -0.01495017 0.02412189 [-0.05377773  0.02417918]
+##      ratio      rhat       mcse
+##  0.7624317 1.0002109 0.00044883
+##  0.6796918 0.9996810 0.00047936
+##  0.5895196 1.0012321 0.00043059
+##  0.6781074 1.0006657 0.00033515
+##  1.0587840 0.9993574 0.00046268
+##  0.8421804 0.9995861 0.00036674
+##  0.8698539 0.9993715 0.00031938
+##  1.2087367 0.9993028 0.00044569
+##  0.9176377 0.9994867 0.00039345
+##  1.0601112 0.9995086 0.00042006
+##  0.8615724 1.0000388 0.00046279
+##  0.6606440 1.0005605 0.00042187
+##  0.7271842 1.0000011 0.00046154
+##  0.6429432 1.0007375 0.00037524
+##  0.8003409 1.0006570 0.00043246
+##  0.7464279 0.9992953 0.00041114
+##  0.8477359 0.9992366 0.00049012
+##  0.6721719 0.9997454 0.00040654
+##  0.7201038 0.9993136 0.00044525
+##  0.7218239 0.9991686 0.00042486
+##  0.8041738 1.0003477 0.00040349
+##  1.0187668 0.9997919 0.00052111
+##  0.6272263 1.0008551 0.00042107
+##  0.7401605 1.0005485 0.00045589
+##  0.6882158 1.0001310 0.00040621
+##  0.7683383 0.9996428 0.00046912
+##  0.6587590 0.9993879 0.00038375
+##  0.8580126 1.0001960 0.00028176
+## 
+## ## Random effect (Intercept: word...APRIL..)
+## 
+##                    estimate  std.error                  HDI(89%)    ratio
+##  word...APRIL.. -0.01572351 0.04490058 [-0.08346093  0.05707128] 1.917196
+##       rhat       mcse
+##  0.9994119 0.00050846
+## 
+## ## Random effect (Intercept: word...EIGHTEENTH..)
+## 
+##                        estimate  std.error                  HDI(89%)
+##  word...EIGHTEENTH.. 0.00303348 0.04365521 [-0.07416425  0.06989237]
+##     ratio     rhat       mcse
+##  1.917782 0.999653 0.00059222
+## 
+## ## Random effect (Intercept: word...FACE..)
+## 
+##                   estimate  std.error                  HDI(89%)    ratio
+##  word...FACE.. -0.00418895 0.04128273 [-0.07351315  0.06375682] 1.480659
+##      rhat      mcse
+##  1.000493 0.0005583
+## 
+## ## Random effect (Intercept: word)
+## 
+##                        estimate  std.error                  HDI(89%)
+##  word.A             -0.01364756 0.02265569 [-0.05101096  0.02053947]
+##  word.ABBREVIATIONS  0.00222935 0.04439972 [-0.07186360  0.07363342]
+##  word.ABLE          -0.00301790 0.04121992 [-0.06992160  0.06516553]
+##  word.ACE           -0.00131478 0.04363248 [-0.07137131  0.06846246]
+##  word.ACHE          -0.01811074 0.04414498 [-0.09331438  0.04557025]
+##  word.ACQUAINTANCES  0.00370175 0.04278542 [-0.06356518  0.07993370]
+##  word.AEROPLANE      0.00798141 0.03928300 [-0.05747127  0.06915319]
+##  word.AGE            0.01980980 0.03320346 [-0.03436203  0.07448328]
+##  word.ALWAYS         0.01896026 0.04104909 [-0.04242711  0.08829051]
+##  word.AMAZINGLY     -0.01202207 0.04123214 [-0.07924726  0.05553672]
+##  word.ANYWAY         0.01527657 0.04082478 [-0.04952858  0.08499951]
+##  word.ANYWAYS       -0.00696452 0.04147616 [-0.07422106  0.06095135]
+##  word.APRIL         -0.01093873 0.03647941 [-0.07223164  0.04831849]
+##  word.ASIAN         -0.01195444 0.04217954 [-0.08092139  0.05396732]
+##  word.ATE            0.00399638 0.04175007 [-0.06704902  0.07064071]
+##  word.AWAY           0.04482250 0.03015199 [-0.00470458  0.09036276]
+##  word.BABIES        -0.00283262 0.04308887 [-0.07435702  0.06162880]
+##  word.BABY           0.01763541 0.01982923 [-0.01197811  0.05035123]
+##  word.BAIT           0.01892086 0.04217496 [-0.04574271  0.08515552]
+##  word.BASED          0.01657413 0.04191478 [-0.04858497  0.08604869]
+##  word.BASICALLY      0.02627389 0.02394727 [-0.00981154  0.06511039]
+##  word.BECAME        -0.01597386 0.04191534 [-0.08389397  0.05021030]
+##  word.BEHAVIOR      -0.00360644 0.04241372 [-0.07344595  0.06583486]
+##  word.BEHAVIOUR     -0.01373887 0.04197578 [-0.08557404  0.05145631]
+##  word.BIRTHDAY      -0.01208025 0.03480767 [-0.06402291  0.04844310]
+##  word.BLAME         -0.00292790 0.04300926 [-0.06956132  0.06993259]
+##  word.BRAVE          0.00360879 0.04096121 [-0.06078464  0.07141731]
+##  word.BREAK          0.02113252 0.04187258 [-0.03690507  0.09119452]
+##  word.BREAKING      -0.00051725 0.04500082 [-0.06887653  0.07171057]
+##  word.CAKE          -0.01917503 0.02133492 [-0.05512549  0.01403241]
+##  word.CAME          -0.03889897 0.02290533 [-0.07445760 -0.00157159]
+##  word.CAPABLE       -0.01037314 0.04282109 [-0.08311168  0.06188410]
+##  word.CASE          -0.01529139 0.04260789 [-0.08577098  0.05706466]
+##  word.CELEBRATE     -0.01257836 0.04386273 [-0.07886552  0.06187300]
+##  word.CELEBRATING   -0.00356209 0.04324613 [-0.07366699  0.06501824]
+##  word.CHANGE         0.00999979 0.02864534 [-0.03750015  0.05569547]
+##  word.CHANGED       -0.01960723 0.04311792 [-0.08854901  0.04719365]
+##  word.CHANGES       -0.00533750 0.04164436 [-0.07362051  0.06497838]
+##  word.CHASE         -0.02197262 0.04285025 [-0.09090777  0.04526022]
+##  word.CHASED        -0.01587249 0.04151511 [-0.07720018  0.05705715]
+##  word.CHASING        0.00110046 0.04328481 [-0.07509220  0.06918316]
+##  word.CLAIM          0.00603154 0.04422867 [-0.07271489  0.07066442]
+##  word.CLAIMED       -0.00513050 0.04154124 [-0.06796640  0.06394982]
+##  word.CLAIMING       0.00464129 0.04384596 [-0.06803710  0.07545607]
+##  word.COMMUNICATE   -0.01155465 0.04273190 [-0.07873816  0.05901213]
+##  word.COMMUNICATION -0.00157258 0.04371481 [-0.06627509  0.07290115]
+##  word.CONVERSATION   0.01627135 0.03875976 [-0.04735956  0.08381402]
+##  word.CONVERSATIONS -0.01207960 0.04277106 [-0.08397333  0.05693575]
+##  word.CRAZY          0.09670643 0.03657169 [ 0.03353865  0.15178684]
+##  word.CREATE        -0.00072169 0.04228346 [-0.06553068  0.06983366]
+##  word.CREATED       -0.01447766 0.04215950 [-0.08333468  0.05848392]
+##  word.CREATING      -0.00509621 0.04180111 [-0.07748256  0.06060638]
+##  word.CUPCAKE       -0.02936998 0.04202375 [-0.10182367  0.03723727]
+##  word.DAISY         -0.02793978 0.03822210 [-0.08853940  0.03691299]
+##  word.DATE          -0.00224414 0.04226792 [-0.06642861  0.06813296]
+##  word.DATES         -0.00724780 0.04163448 [-0.07456399  0.06162088]
+##  word.DAY           -0.05008536 0.02510322 [-0.09291439 -0.01053750]
+##  word.DAYLIGHT       0.05420189 0.04732541 [-0.01803799  0.13236795]
+##  word.DAYS          -0.00797503 0.02640619 [-0.05258649  0.03127395]
+##  word.DISABLED       0.00287661 0.03977660 [-0.06505541  0.06977154]
+##  word.DONATED       -0.01310669 0.04248597 [-0.07937864  0.06221871]
+##  word.EIGHT          0.02253890 0.02476749 [-0.02103075  0.05980204]
+##  word.EIGHTH        -0.00682803 0.04065053 [-0.07199970  0.05837687]
+##  word.EIGHTY         0.01176862 0.04153383 [-0.05660126  0.07712048]
+##  word.ELABORATE     -0.00643353 0.04280431 [-0.07453822  0.06177644]
+##  word.ELABORATED     0.00545510 0.04313167 [-0.06033595  0.07758658]
+##  word.ESCALATES     -0.01830797 0.04067534 [-0.08052500  0.04802253]
+##  word.ESCAPED       -0.00485309 0.03157542 [-0.06043344  0.04298762]
+##  word.ESTATE        -0.00417528 0.04199776 [-0.06765220  0.05849170]
+##  word.EXPLAIN       -0.00783717 0.04146416 [-0.07538976  0.05687270]
+##  word.FACE           0.02690378 0.03012516 [-0.02106359  0.07500538]
+##  word.FACED         -0.01006892 0.04256978 [-0.08199384  0.05983303]
+##  word.FACES         -0.00905338 0.04273101 [-0.08216899  0.05982239]
+##  word.FAKE           0.02393511 0.03979148 [-0.03588110  0.08526300]
+##  word.FAMOUS        -0.00302412 0.04304621 [-0.07087861  0.06532217]
+##  word.FAVORITE      -0.00524814 0.04432327 [-0.07739107  0.06543107]
+##  word.FAVOURITE     -0.01091432 0.04118938 [-0.07958343  0.05155610]
+##  word.FLAMES        -0.00603133 0.04042010 [-0.06809808  0.06475378]
+##  word.FLIRTATIOUS    0.00151463 0.04151613 [-0.07007174  0.06789606]
+##  word.FRIDAY        -0.00627715 0.04473440 [-0.08136130  0.06482718]
+##  word.GAME          -0.03737830 0.03160848 [-0.09099751  0.01056309]
+##  word.GAMES         -0.02048496 0.04263049 [-0.08662143  0.05216688]
+##  word.GATE           0.05387906 0.02657807 [ 0.01301160  0.09944181]
+##  word.GAVE          -0.03646818 0.02858293 [-0.07939192  0.01372159]
+##  word.GAY           -0.02114643 0.03256912 [-0.07372689  0.03406247]
+##  word.GAYS          -0.01688760 0.04286699 [-0.08223946  0.05564571]
+##  word.GENERATION     0.01615690 0.04168158 [-0.05284365  0.08021077]
+##  word.GREAT          0.02429033 0.03522956 [-0.03446927  0.07728563]
+##  word.GRENADA       -0.00960550 0.04140282 [-0.07311518  0.06314021]
+##  word.GREY           0.08164268 0.03520678 [ 0.02482289  0.13626881]
+##  word.H             -0.00935178 0.04192339 [-0.07467223  0.06155802]
+##  word.HAIRSPRAY     -0.00623726 0.04206343 [-0.07418630  0.06045880]
+##  word.HATE          -0.00481322 0.03693512 [-0.06792834  0.05612146]
+##  word.HATED          0.00037613 0.03608340 [-0.05890641  0.05814353]
+##  word.HAY            0.03930475 0.02851935 [-0.00419024  0.08687828]
+##  word.HAYS          -0.00850992 0.04202099 [-0.07650906  0.06072941]
+##  word.HEY            0.00970278 0.03864170 [-0.05313948  0.07310080]
+##  word.HEYA           0.01992488 0.04433819 [-0.05302131  0.08974914]
+##  word.HOLIDAY        0.03501483 0.04243486 [-0.03161521  0.10686354]
+##  word.HOLIDAYS      -0.01453594 0.04161327 [-0.07959518  0.04940375]
+##  word.INDICATE       0.00286077 0.04258466 [-0.07008981  0.06836037]
+##  word.INTEGRATED    -0.01447446 0.04313597 [-0.08618023  0.05221358]
+##  word.INVADING      -0.00494518 0.04218224 [-0.07293422  0.06835824]
+##  word.ISOLATION      0.01403660 0.04390494 [-0.05513066  0.08408213]
+##  word.ISRAELI        0.00241762 0.04429655 [-0.07138479  0.06857426]
+##  word.J              0.00914328 0.03967641 [-0.05563908  0.07196887]
+##  word.JAMAICAN      -0.00169900 0.04091617 [-0.06846553  0.06487440]
+##  word.K             -0.01155647 0.04236375 [-0.07555443  0.05735788]
+##  word.KAY           -0.06885082 0.03618902 [-0.12787160 -0.01580738]
+##  word.LADIES        -0.00137947 0.04137239 [-0.06729500  0.06893735]
+##  word.LADY           0.04538843 0.03187952 [-0.00321722  0.09700977]
+##  word.LATE           0.00217879 0.03756524 [-0.06004969  0.06199776]
+##  word.LATER          0.00615707 0.03130243 [-0.04332255  0.05569428]
+##  word.LAYING         0.00061854 0.04227126 [-0.06706308  0.07204750]
+##  word.MADE          -0.01468620 0.02968708 [-0.06370706  0.03210595]
+##  word.MAIN          -0.00091085 0.04304713 [-0.07453647  0.06725641]
+##  word.MAINLY        -0.00719489 0.03810962 [-0.06605614  0.05407994]
+##  word.MAINSTREAM    -0.00511721 0.04162033 [-0.06840515  0.06777162]
+##  word.MAISONETTE     0.00124822 0.04190911 [-0.06997132  0.07133864]
+##  word.MAJOR         -0.01664495 0.04272392 [-0.08650529  0.05258209]
+##  word.MAJORLY        0.00549436 0.03985331 [-0.05819954  0.07352627]
+##  word.MAKE           0.03250627 0.02624514 [-0.00846522  0.07413389]
+##  word.MAKES          0.04522081 0.03853557 [-0.01794747  0.11042519]
+##  word.MAKING         0.04072849 0.03536341 [-0.01733293  0.09813287]
+##  word.MATES         -0.01118065 0.04326409 [-0.08463180  0.05652670]
+##  word.MAY           -0.01126998 0.04303466 [-0.08246596  0.05800577]
+##  word.MAYBE         -0.03528049 0.03215326 [-0.08600164  0.01438584]
+##  word.MEDICATION    -0.00628838 0.04470737 [-0.07612152  0.06615209]
+##  word.MISTAKE       -0.02358045 0.04152057 [-0.09466667  0.04092505]
+##  word.MISTAKES      -0.00372485 0.04137537 [-0.06927729  0.06294938]
+##  word.MKAY          -0.04163633 0.04103253 [-0.10671550  0.03134322]
+##  word.MONDAY        -0.00643073 0.03884807 [-0.07523753  0.05572064]
+##  word.NAKED          0.02810014 0.04482926 [-0.04003606  0.10146325]
+##  word.NAME          -0.03838652 0.03103140 [-0.08890160  0.01121467]
+##  word.NAMES         -0.02581939 0.04219458 [-0.09154373  0.04225453]
+##  word.NAVY          -0.00698382 0.03862107 [-0.06952128  0.05794230]
+##  word.NEIGHBORING   -0.00304964 0.04262809 [-0.07467936  0.06627651]
+##  word.NEIGHBOUR     -0.01248848 0.04139496 [-0.07666141  0.05377095]
+##  word.NEIGHBOURS    -0.00679362 0.04059638 [-0.07683223  0.06073532]
+##  word.NICKNAME      -0.00318947 0.03996130 [-0.07464446  0.06501200]
+##  word.NOWADAYS       0.03171087 0.03887769 [-0.03115694  0.09222299]
+##  word.OCCASIONS     -0.01102440 0.04477839 [-0.08103345  0.06176884]
+##  word.OKAY          -0.04383748 0.01576227 [-0.06895926 -0.01864667]
+##  word.ORIGINATORS   -0.00426084 0.04198275 [-0.07821292  0.06376469]
+##  word.OVERRATED     -0.01422253 0.04230377 [-0.08388797  0.05462430]
+##  word.PAGE           0.00640176 0.04018732 [-0.05572861  0.07716248]
+##  word.PAGES          0.00916696 0.04087524 [-0.05828466  0.07932845]
+##  word.PAID           0.01478269 0.04237853 [-0.05310166  0.08619454]
+##  word.PAINT          0.01359908 0.04010305 [-0.05085532  0.08217082]
+##  word.PAINTED        0.00035263 0.04226093 [-0.06581960  0.06968713]
+##  word.PAINTING       0.02269420 0.04243592 [-0.04139289  0.09417548]
+##  word.PAPER          0.01652439 0.03474600 [-0.03608269  0.07234701]
+##  word.PAY           -0.02972916 0.03715271 [-0.09053054  0.02857021]
+##  word.PAYING        -0.00003692 0.04071190 [-0.06640239  0.06986508]
+##  word.PLACE          0.00845396 0.03245788 [-0.04596717  0.05955638]
+##  word.PLACES        -0.00508497 0.04139550 [-0.07850227  0.06151823]
+##  word.PLATE          0.00050514 0.04358899 [-0.06563743  0.07471514]
+##  word.PLAY          -0.00160563 0.03061487 [-0.04761952  0.04705502]
+##  word.PLAYED         0.01596977 0.03983809 [-0.04564782  0.08166050]
+##  word.PLAYER        -0.01693159 0.04488437 [-0.08604737  0.05581936]
+##  word.PLAYING       -0.03424049 0.03690728 [-0.09462504  0.02478194]
+##  word.PLAYS         -0.00009333 0.04281775 [-0.07026912  0.07228915]
+##  word.PLAYTIME       0.02404958 0.04141036 [-0.03965037  0.09335914]
+##  word.PORTRAY        0.00091857 0.04158978 [-0.06603194  0.06833751]
+##  word.PRAY          -0.00461090 0.04188502 [-0.07653783  0.06326198]
+##  word.PRAYED         0.01892702 0.04392572 [-0.05356309  0.09002412]
+##  word.PRAYING       -0.00841540 0.04275535 [-0.07102795  0.06596893]
+##  word.RACE          -0.00172732 0.03873108 [-0.06347583  0.06445435]
+##  word.RACIAL         0.00244679 0.04314284 [-0.06811532  0.07447818]
+##  word.RACING         0.04719256 0.03171138 [-0.00486096  0.09451851]
+##  word.RACISM         0.02573456 0.04529440 [-0.04495696  0.09813374]
+##  word.RACIST         0.02635999 0.03631108 [-0.02861372  0.08498255]
+##  word.RAIN           0.00879552 0.04361390 [-0.06885974  0.07555119]
+##  word.RAINBOW       -0.01336739 0.04200757 [-0.08305286  0.05817812]
+##  word.RAINY          0.01066181 0.04159708 [-0.05711896  0.07873127]
+##  word.RAISED         0.00198715 0.04081503 [-0.06423412  0.06581097]
+##  word.RAISING        0.02684238 0.03216876 [-0.01796806  0.08162742]
+##  word.RAPE          -0.00163390 0.04297708 [-0.06993511  0.07087769]
+##  word.RELATED       -0.00755848 0.04306778 [-0.07360574  0.06638078]
+##  word.RELATIONSHIP   0.00641363 0.03934232 [-0.05609446  0.06680450]
+##  word.RETALIATING   -0.00157604 0.04274347 [-0.06821572  0.07016579]
+##  word.ROLLERBLADES  -0.01668954 0.04300480 [-0.08995478  0.05094805]
+##  word.SAFE          -0.00788054 0.03889658 [-0.06809668  0.05139551]
+##  word.SAFETY        -0.00712610 0.03218277 [-0.05512280  0.04675999]
+##  word.SAINSBURYS     0.00113196 0.04490538 [-0.07760126  0.06746495]
+##  word.SAKE          -0.02121617 0.04072895 [-0.08801215  0.04887856]
+##  word.SAME           0.01654522 0.01651488 [-0.00883372  0.04537604]
+##  word.SAVE          -0.00475256 0.04280762 [-0.07557546  0.06038758]
+##  word.SAVED         -0.00893868 0.04348498 [-0.07666473  0.06475679]
+##  word.SAY           -0.02124972 0.01667613 [-0.04904857  0.00384926]
+##  word.SAYING        -0.00312217 0.01995322 [-0.03546336  0.02858507]
+##  word.SEPARATED      0.03337871 0.04223689 [-0.03713271  0.10383064]
+##  word.SHAKING       -0.00082500 0.04305329 [-0.07591161  0.06523234]
+##  word.SHAPE         -0.00554034 0.04390648 [-0.07227820  0.06403999]
+##  word.SITUATION     -0.00059458 0.04182540 [-0.06524090  0.06679220]
+##  word.SITUATIONS    -0.00687049 0.04310145 [-0.07581690  0.06443470]
+##  word.SNAKE          0.00772482 0.04208609 [-0.06174126  0.07623349]
+##  word.SPACE          0.04952751 0.04307554 [-0.01511889  0.11850432]
+##  word.SPRAYING      -0.00331246 0.04136988 [-0.06941412  0.06740223]
+##  word.STAGES        -0.01542522 0.04505799 [-0.09024532  0.05239928]
+##  word.STATEMENT     -0.00167280 0.04314641 [-0.07565338  0.06579288]
+##  word.STATION       -0.00553831 0.04253833 [-0.07395367  0.06328603]
+##  word.STAY           0.02277966 0.03023504 [-0.02827795  0.06835067]
+##  word.STAYED        -0.02478800 0.02948820 [-0.07142889  0.02288145]
+##  word.STAYING        0.00935001 0.03903227 [-0.05419937  0.06956399]
+##  word.STEAK          0.00292281 0.04224553 [-0.06230654  0.07286002]
+##  word.STRAIGHT      -0.00376900 0.03665091 [-0.06072829  0.05595318]
+##  word.SUNDAYS       -0.00939477 0.04327569 [-0.07900875  0.05835294]
+##  word.TABLE          0.00615907 0.02584170 [-0.03517810  0.04847990]
+##  word.TAKE          -0.00569932 0.02380699 [-0.04550763  0.03040594]
+##  word.TAKEAWAY      -0.00888701 0.04225020 [-0.07960236  0.06269645]
+##  word.TAKEN         -0.00664468 0.04179182 [-0.07673571  0.06706989]
+##  word.TAKES          0.05787269 0.04896387 [-0.01437814  0.13706072]
+##  word.TAKING         0.00457295 0.03911937 [-0.05806982  0.06868035]
+##  word.TEENAGERS     -0.00488032 0.03984283 [-0.07889442  0.05588174]
+##  word.THEY          -0.00692038 0.01192786 [-0.02596568  0.01347019]
+##  word.TODAY         -0.02420535 0.03374010 [-0.08042277  0.02958687]
+##  word.TRAINED        0.00052860 0.04447946 [-0.06798292  0.07227937]
+##  word.TRAINERS      -0.00654330 0.04354428 [-0.07922597  0.06261171]
+##  word.TUESDAY        0.00646803 0.04325766 [-0.05864057  0.08167889]
+##  word.VIBRATING     -0.01542636 0.04264412 [-0.08480089  0.05548501]
+##  word.WAIT           0.06941213 0.02227767 [ 0.03355480  0.10533238]
+##  word.WAITED         0.00786582 0.04366338 [-0.06077550  0.07987004]
+##  word.WAITING       -0.01878428 0.03948647 [-0.07996522  0.04433069]
+##  word.WAKE           0.00376405 0.03956749 [-0.05890638  0.06967438]
+##  word.WAKES          0.02408866 0.04062447 [-0.04771948  0.09004498]
+##  word.WASTING       -0.00068304 0.04105388 [-0.07159502  0.06552491]
+##  word.WAY            0.00252140 0.02518956 [-0.03845548  0.04259313]
+##  word.WAYS          -0.00886155 0.04238666 [-0.08083683  0.05553253]
+##  word.WEDNESDAY     -0.00101614 0.04154183 [-0.07042531  0.06444192]
+##  word.YESTERDAY     -0.01139280 0.04455700 [-0.08454224  0.05750126]
+##      ratio      rhat       mcse
+##  1.4902304 0.9998010 0.00024798
+##  2.1010973 0.9993176 0.00052567
+##  1.8439118 0.9998858 0.00051947
+##  1.6858358 0.9995254 0.00057114
+##  1.4673883 0.9995420 0.00049518
+##  1.9632609 0.9996651 0.00054932
+##  1.6830805 1.0001303 0.00045597
+##  1.9454801 0.9994632 0.00040253
+##  1.9588055 0.9993456 0.00055764
+##  1.3780189 0.9997022 0.00049844
+##  1.8592705 0.9999205 0.00048392
+##  1.9287866 0.9992855 0.00050971
+##  1.7277976 0.9996788 0.00047425
+##  1.5777998 0.9992489 0.00053491
+##  1.8405050 0.9995734 0.00053044
+##  1.6731048 0.9995802 0.00032565
+##  2.0906123 0.9994072 0.00058168
+##  1.3808122 0.9991982 0.00025128
+##  1.5592703 0.9995695 0.00046177
+##  1.9995065 0.9993832 0.00054325
+##  1.5182535 0.9994428 0.00030009
+##  1.5306626 0.9999380 0.00048314
+##  1.9697576 0.9993498 0.00049389
+##  1.9711791 0.9996120 0.00049473
+##  1.9369703 0.9998121 0.00038534
+##  1.7171738 0.9991977 0.00048999
+##  1.9775920 0.9996103 0.00051486
+##  1.6748460 0.9993119 0.00047925
+##  1.8368673 0.9994701 0.00053280
+##  1.7248086 1.0001967 0.00027312
+##  1.5612092 0.9995178 0.00027024
+##  1.7971724 0.9997324 0.00050999
+##  2.0103920 0.9990781 0.00049690
+##  1.9895954 0.9993106 0.00048558
+##  2.0568375 0.9999607 0.00055846
+##  1.5642664 0.9999078 0.00034159
+##  1.8194222 0.9994032 0.00052314
+##  1.6694522 0.9995519 0.00053180
+##  1.7157668 0.9992418 0.00047282
+##  2.0412478 0.9992677 0.00048751
+##  1.8843546 0.9990700 0.00053037
+##  1.8013473 0.9992976 0.00054590
+##  1.7001335 0.9992781 0.00046195
+##  2.0533423 0.9994110 0.00057562
+##  1.5273682 0.9992050 0.00050593
+##  1.9044772 0.9998203 0.00056147
+##  1.5253559 0.9998676 0.00048763
+##  1.8115412 0.9991862 0.00072148
+##  0.9545170 0.9998876 0.00041524
+##  2.0049773 0.9993711 0.00054281
+##  1.5840884 0.9995137 0.00048465
+##  2.1389121 0.9992365 0.00053914
+##  1.6258541 0.9995884 0.00054558
+##  1.6016241 1.0001472 0.00049584
+##  1.6175604 0.9993216 0.00044819
+##  2.1971957 0.9991875 0.00049855
+##  1.8211282 1.0000545 0.00042878
+##  0.9032098 0.9992440 0.00056709
+##  1.7833446 0.9991473 0.00029316
+##  2.0073940 1.0001670 0.00047432
+##  1.9806495 0.9994512 0.00053229
+##  1.7707145 0.9997676 0.00028658
+##  1.8671498 0.9993985 0.00051569
+##  1.5727278 0.9994513 0.00052068
+##  1.6639329 0.9993114 0.00053775
+##  1.6355293 0.9992116 0.00060695
+##  1.3210866 0.9995907 0.00043474
+##  2.2488124 0.9993567 0.00036439
+##  1.9412036 0.9997371 0.00039418
+##  2.7107409 0.9992074 0.00049867
+##  1.7236262 0.9996539 0.00033803
+##  1.9943624 0.9994126 0.00058096
+##  1.5012872 0.9999560 0.00054169
+##  1.6744454 0.9996399 0.00043049
+##  2.0527405 1.0001247 0.00054760
+##  1.5528290 0.9996181 0.00059554
+##  1.4196542 0.9992250 0.00049599
+##  1.8337530 0.9992724 0.00051538
+##  1.6834506 0.9995496 0.00050279
+##  1.8725833 0.9996636 0.00054740
+##  1.7655462 0.9995098 0.00038655
+##  1.7271935 0.9997726 0.00059641
+##  1.3207822 0.9998081 0.00034571
+##  1.8960200 0.9991919 0.00038104
+##  1.4653217 1.0000681 0.00036682
+##  2.0884615 0.9998754 0.00049197
+##  2.0117058 0.9993500 0.00049976
+##  1.7891796 0.9992550 0.00043606
+##  1.6542452 0.9992664 0.00064087
+##  1.1212495 0.9991648 0.00040924
+##  1.8352226 0.9993272 0.00054384
+##  1.5267236 0.9999371 0.00049752
+##  1.8527589 1.0000805 0.00046552
+##  1.7235005 0.9993047 0.00047225
+##  1.5338580 0.9994381 0.00033117
+##  1.8840495 0.9997440 0.00049226
+##  1.9129317 0.9991210 0.00047670
+##  1.7660526 0.9993132 0.00059144
+##  1.4799023 0.9993817 0.00047450
+##  2.1103990 0.9994577 0.00048131
+##  1.8005882 0.9996167 0.00050891
+##  1.8392663 0.9993221 0.00054441
+##  1.6255304 0.9998875 0.00057776
+##  2.0236342 0.9993033 0.00052399
+##  1.7654699 0.9996701 0.00051822
+##  1.8337026 0.9992104 0.00049150
+##  1.6694947 0.9994339 0.00043082
+##  2.3923351 0.9991229 0.00059883
+##  1.2576148 0.9995177 0.00040635
+##  1.9362243 0.9993799 0.00057078
+##  1.3989911 0.9993249 0.00037639
+##  1.7697131 0.9994064 0.00044485
+##  1.9002138 0.9992299 0.00034108
+##  2.0800602 0.9998710 0.00052165
+##  2.0332521 0.9998661 0.00032316
+##  2.2107119 0.9994196 0.00050643
+##  1.9421102 0.9994239 0.00043401
+##  1.9226313 0.9994501 0.00049238
+##  1.9064964 0.9992169 0.00053894
+##  1.6727998 0.9997492 0.00055435
+##  1.5763602 0.9996290 0.00053864
+##  1.4726516 0.9994269 0.00034300
+##  1.4312323 0.9997433 0.00053617
+##  1.4041177 0.9992238 0.00039034
+##  2.1661629 0.9991262 0.00050701
+##  1.8926931 0.9992851 0.00055801
+##  1.5675845 0.9996761 0.00034005
+##  2.1736415 0.9994894 0.00055731
+##  1.6369277 0.9997532 0.00050082
+##  1.8130095 0.9993348 0.00052210
+##  1.6526630 0.9995278 0.00044254
+##  2.3461105 0.9992130 0.00052115
+##  1.5273699 0.9991723 0.00058171
+##  1.5108088 0.9994028 0.00037728
+##  1.7378327 0.9997842 0.00045596
+##  2.1724682 0.9993432 0.00048592
+##  1.7067573 0.9998563 0.00053892
+##  1.7287854 0.9994733 0.00051236
+##  1.6870127 0.9993387 0.00050003
+##  1.8219025 0.9997121 0.00054754
+##  1.5551528 0.9993981 0.00052260
+##  1.4038470 0.9995171 0.00058683
+##  1.4517263 0.9995124 0.00017887
+##  1.9522953 0.9993525 0.00055448
+##  1.6380658 0.9991292 0.00057262
+##  1.4314204 0.9994044 0.00055201
+##  1.4766601 1.0003050 0.00051890
+##  1.7143473 0.9995040 0.00055534
+##  1.5761828 0.9992281 0.00047472
+##  1.9645538 0.9992044 0.00053703
+##  1.6075217 0.9997810 0.00048078
+##  2.0161726 0.9994796 0.00042464
+##  1.7808004 0.9995093 0.00049033
+##  1.4614243 0.9992977 0.00053811
+##  1.6141847 0.9991120 0.00038144
+##  1.8741918 0.9995151 0.00050210
+##  1.8907358 0.9996381 0.00053127
+##  1.7686984 0.9992564 0.00035726
+##  1.7360952 0.9996044 0.00050546
+##  1.5433811 0.9995986 0.00053508
+##  1.7971990 0.9996364 0.00044477
+##  1.7918672 0.9993636 0.00058626
+##  1.4553946 0.9993124 0.00053798
+##  1.5068843 0.9997343 0.00054270
+##  1.5184763 0.9995618 0.00054877
+##  1.6020561 0.9993644 0.00051519
+##  1.8874233 0.9993509 0.00051473
+##  1.7868209 0.9993159 0.00053547
+##  1.4740388 0.9992984 0.00060968
+##  1.3535377 1.0003612 0.00036724
+##  1.7855747 0.9993436 0.00056712
+##  1.6255955 0.9995475 0.00041845
+##  1.8335479 0.9997657 0.00057387
+##  1.5353899 0.9996413 0.00049899
+##  1.9551392 0.9995384 0.00045502
+##  2.2395719 0.9994227 0.00048882
+##  1.7981629 0.9994633 0.00036463
+##  1.9163214 0.9992538 0.00053189
+##  1.7113124 0.9992929 0.00051231
+##  1.8344905 0.9998049 0.00045642
+##  1.8324110 0.9993024 0.00049126
+##  1.9459412 0.9992713 0.00055445
+##  1.5766200 0.9993568 0.00048810
+##  1.5325945 0.9996906 0.00035632
+##  2.0317597 0.9992631 0.00057579
+##  1.5877695 0.9997034 0.00053957
+##  1.6010665 0.9990721 0.00019162
+##  1.9566736 0.9996027 0.00052525
+##  1.6567272 0.9993269 0.00054893
+##  1.6106108 0.9993721 0.00021013
+##  1.5685455 0.9995267 0.00026410
+##  1.4434262 0.9996061 0.00049142
+##  2.0537944 0.9995122 0.00054697
+##  1.6830870 0.9996296 0.00051096
+##  1.7952704 0.9995027 0.00049625
+##  1.7962021 0.9992767 0.00051025
+##  1.9088365 0.9994060 0.00061118
+##  1.2632850 0.9994960 0.00048526
+##  1.9310265 0.9994735 0.00054083
+##  1.5700734 0.9993452 0.00054781
+##  1.7446299 0.9992513 0.00055784
+##  1.6018302 0.9999697 0.00054819
+##  1.5966587 0.9993194 0.00038796
+##  1.5340903 0.9996426 0.00034169
+##  1.8725480 0.9991421 0.00045200
+##  1.8189858 0.9993139 0.00051220
+##  1.7473532 0.9993841 0.00045806
+##  1.6406300 0.9996118 0.00050064
+##  1.9101836 0.9992687 0.00033946
+##  1.4822849 0.9996909 0.00027773
+##  1.8258753 0.9993417 0.00049241
+##  2.1191140 0.9993201 0.00073592
+##  0.9243984 0.9992651 0.00055345
+##  1.9530408 0.9994262 0.00048700
+##  1.6347220 0.9993888 0.00060752
+##  1.2321138 0.9999321 0.00014439
+##  1.9776937 0.9992693 0.00042572
+##  2.0656084 0.9995840 0.00048288
+##  2.1793045 0.9993917 0.00053618
+##  1.6868351 0.9999293 0.00053593
+##  1.6840723 0.9993111 0.00061969
+##  1.3019700 0.9999849 0.00028115
+##  1.6133059 0.9996182 0.00047144
+##  2.2008485 0.9997598 0.00048652
+##  1.6611430 0.9995331 0.00053984
+##  1.4021836 0.9998071 0.00050385
+##  1.8490250 0.9997544 0.00051654
+##  1.7862847 0.9994613 0.00027646
+##  2.0922341 0.9995791 0.00047466
+##  2.0434943 0.9995450 0.00050480
+##  1.8466218 0.9997746 0.00104244
+## 
+## ## Random effect (Intercept: word.AIN)
+## 
+##                estimate  std.error                  HDI(89%)    ratio
+##  word.AIN.T -0.00936142 0.04227054 [-0.08199280  0.06073224] 1.782967
+##      rhat       mcse
+##  0.999748 0.00049736
+## 
+## ## Random effect (Intercept: word.ASIAN)
+## 
+##                  estimate  std.error                  HDI(89%)    ratio
+##  word.ASIAN.S -0.00407782 0.04302234 [-0.07800245  0.06187080] 1.585333
+##       rhat       mcse
+##  0.9994072 0.00051197
+## 
+## ## Random effect (Intercept: word.BABY)
+## 
+##                 estimate  std.error                  HDI(89%)    ratio
+##  word.BABY.S -0.01609184 0.04155519 [-0.08558368  0.04897035] 1.513878
+##       rhat       mcse
+##  0.9992145 0.00054312
+## 
+## ## Random effect (Intercept: word.BIRTHDAY)
+## 
+##                    estimate  std.error                  HDI(89%)    ratio
+##  word.BIRTHDAY.S 0.01473618 0.04137829 [-0.05105583  0.08118920] 2.077243
+##       rhat       mcse
+##  0.9991971 0.00050136
+## 
+## ## Random effect (Intercept: word.GATE)
+## 
+##                estimate  std.error                  HDI(89%)    ratio
+##  word.GATE.S 0.01565357 0.04256161 [-0.05162837  0.09195439] 1.564083
+##       rhat       mcse
+##  0.9995553 0.00051964
+## 
+## ## Random effect (Intercept: word.INVESTIGATOR)
+## 
+##                        estimate  std.error                  HDI(89%)
+##  word.INVESTIGATOR.S -0.0081716 0.04334128 [-0.08072958  0.05633714]
+##     ratio     rhat     mcse
+##  1.484619 0.999392 0.000486
+## 
+## ## Random effect (Intercept: word.M)
+## 
+##                estimate  std.error                  HDI(89%)    ratio
+##  word.M.KAY -0.01307019 0.04162602 [-0.08187551  0.05157345] 1.802417
+##       rhat       mcse
+##  0.9998229 0.00047176
+## 
+## ## Random effect (Intercept: word.NAME)
+## 
+##                 estimate std.error                  HDI(89%)    ratio
+##  word.NAME.S -0.00338579 0.0406441 [-0.07594173  0.06335781] 1.707051
+##       rhat       mcse
+##  0.9992751 0.00052198
+## 
+## ## Random effect (Intercept: word.PAPER)
+## 
+##                  estimate  std.error                  HDI(89%)    ratio
+##  word.PAPER.S -0.00156171 0.04126916 [-0.06233291  0.07035762] 1.659913
+##       rhat       mcse
+##  0.9994932 0.00049794
+## 
+## ## Random effect (Intercept: word.THEY)
+## 
+##                  estimate  std.error                  HDI(89%)    ratio
+##  word.THEY.D  -0.00589028 0.04151394 [-0.07564786  0.06041845] 1.785991
+##  word.THEY.VE -0.02547287 0.03971733 [-0.09253527  0.03832904] 1.780016
+##       rhat       mcse
+##  0.9995083 0.00050876
+##  0.9995258 0.00046084
+## 
+## ## Random effect (Intercept: word.TODAY)
+## 
+##                 estimate  std.error                  HDI(89%)    ratio
+##  word.TODAY.S 0.00813608 0.04293405 [-0.06267056  0.07729061] 1.652903
+##       rhat       mcse
+##  0.9996168 0.00048846</code></pre>
+<p>The tidy_stan summary with HPDI 89% credible intervals and the ordinary summary with 95% symmetrical credible intervals agree with each other, which is good – shows the effects aren’t flimsy.</p>
+<p>Plot the posteriors of the fixed effects with 89% HPDI credible intervals:</p>
+<pre class="r"><code>posterior2 &lt;- as.matrix(model2)
+
+#dimnames(posterior2)
+
+mcmc_areas(posterior2,
+           pars = c(&quot;b_Intercept&quot;, 
+                    &quot;b_Log_dur_z&quot;,
+                    &quot;b_agechild&quot;, 
+                    &quot;b_SexF&quot;, 
+                    &quot;b_agechild:SexF&quot;),
+           prob=0.89)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<div id="plotting-bayesian-output-1" class="section level3">
+<h3>Plotting Bayesian output</h3>
+<p>Plot marginal_effects:</p>
+<pre class="r"><code>marg2 &lt;- marginal_effects(model2, ask = FALSE)
+
+p &lt;- plot(marg2, plot = FALSE)[[4]]
+
+p  + theme_minimal() + labs(y = &quot;Normalized Trajectory Length&quot;, x = &quot;Age&quot;)</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>Save marg2 to a new df:</p>
+<pre class="r"><code>face_traj &lt;- as.data.frame(marg2[4])</code></pre>
+<p>Check structure</p>
+<pre class="r"><code>str(face_traj)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    4 obs. of  13 variables:
+##  $ age.Sex.age        : Factor w/ 2 levels &quot;adolescent&quot;,&quot;child&quot;: 1 1 2 2
+##  $ age.Sex.Sex        : Factor w/ 2 levels &quot;M&quot;,&quot;F&quot;: 1 2 1 2
+##  $ age.Sex.norm_TL    : num  0.37 0.37 0.37 0.37
+##  $ age.Sex.Log_dur_z  : num  -0.00818 -0.00818 -0.00818 -0.00818
+##  $ age.Sex.participant: logi  NA NA NA NA
+##  $ age.Sex.word       : logi  NA NA NA NA
+##  $ age.Sex.cond__     : Factor w/ 1 level &quot;1&quot;: 1 1 1 1
+##  $ age.Sex.effect1__  : Factor w/ 2 levels &quot;adolescent&quot;,&quot;child&quot;: 1 1 2 2
+##  $ age.Sex.effect2__  : Factor w/ 2 levels &quot;M&quot;,&quot;F&quot;: 1 2 1 2
+##  $ age.Sex.estimate__ : num  0.325 0.398 0.398 0.367
+##  $ age.Sex.se__       : num  0.0176 0.0185 0.0193 0.0187
+##  $ age.Sex.lower__    : num  0.288 0.361 0.36 0.328
+##  $ age.Sex.upper__    : num  0.361 0.434 0.434 0.404</code></pre>
+<p>Define columns to keep:</p>
+<pre class="r"><code>keep1 &lt;- c(&quot;age.Sex.age&quot;, &quot;age.Sex.Sex&quot;, &quot;age.Sex.estimate__&quot;, &quot;age.Sex.se__&quot;, &quot;age.Sex.lower__&quot;, &quot;age.Sex.upper__&quot;)</code></pre>
+<p>Perform “select”:</p>
+<pre class="r"><code>face_traj2 &lt;- face_traj %&gt;% select(keep1)</code></pre>
+<p>Rename columns:</p>
+<pre class="r"><code>colnames(face_traj2) &lt;- c(&quot;age&quot;,&quot;Sex&quot;,&quot;norm_TL&quot;, &quot;SE&quot;,&quot;lower&quot;, &quot;upper&quot;)</code></pre>
+<p>Plot it:</p>
+<pre class="r"><code>f &lt;- ggplot(face, aes(x = age, y = norm_TL, fill = Sex)) + 
+  geom_violin(color = NA) + 
+  geom_boxplot(width = 0.3, position = position_dodge(0.9), color = &quot;#999999&quot;) + 
+  theme_minimal() + 
+  scale_fill_manual(values = binary) + 
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size = rel(1.5)),
+        legend.text = element_text(size = rel(1.5)),
+        axis.title = element_text(size = rel(2)), 
+        axis.text = element_text(size = rel(1.5)), 
+        plot.title = element_text(size = rel(2))) +
+  labs(x = &quot;Age&quot;, y = &quot;Trajectory Length&quot;, title = &quot;FACE: Trajectory Length&quot;) +
+  ylim(0, 2)
+f</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-41-1.png" width="768" /></p>
+<pre class="r"><code>f2 &lt;- f + geom_point(data = face_traj2, aes(x=age, y=norm_TL), size = 4, position = pd) +
+  geom_errorbar(data = face_traj2, aes(ymin=lower, ymax=upper), width=.1, size = 1, position = pd)
+
+f2</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-42-1.png" width="768" /></p>
+</div>
+</div>
+</div>
+<div id="price" class="section level1">
+<h1>PRICE</h1>
+<p>Create the subset:</p>
+<pre class="r"><code>price &lt;- diphs3 %&gt;% filter(sound_label == &quot;price&quot;)</code></pre>
+<div id="price-f2-at-20" class="section level2">
+<h2>PRICE F2 at 20%</h2>
+<p>Figure out what priors we need:</p>
+<pre class="r"><code>get_prior(normF2_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = price)</code></pre>
+<pre><code>##                  prior     class          coef       group resp dpar nlpar
+## 1                              b                                          
+## 2                              b      agechild                            
+## 3                              b agechild:SexF                            
+## 4                              b     Log_dur_z                            
+## 5                              b          SexF                            
+## 6  student_t(3, 1, 10) Intercept                                          
+## 7  student_t(3, 0, 10)        sd                                          
+## 8                             sd               participant                
+## 9                             sd     Intercept participant                
+## 10                            sd                      word                
+## 11                            sd     Intercept        word                
+## 12 student_t(3, 0, 10)     sigma                                          
+##    bound
+## 1       
+## 2       
+## 3       
+## 4       
+## 5       
+## 6       
+## 7       
+## 8       
+## 9       
+## 10      
+## 11      
+## 12</code></pre>
+<p>Check distribution of the dependent variable conditional on the independent variables:</p>
+<pre class="r"><code>ggplot(price, aes(x=age, y = normF2_20, fill = Sex)) + geom_violin()</code></pre>
+<p><img src="icphs_regression_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<p>Set some priors:</p>
+<pre class="r"><code>priors3 &lt;- c(set_prior(&quot;normal(1, 1)&quot;, class = &quot;Intercept&quot;), #
+              set_prior(&quot;normal(0, 2)&quot;, class = &quot;b&quot;, coef = &quot;Log_dur_z&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;agechild&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;b&quot;, coef = &quot;SexF&quot;),
+              set_prior(&quot;normal(0, 1.5)&quot;, class = &quot;b&quot;, coef = &quot;agechild:SexF&quot;), #2*age effect to allow for complete reversal
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;participant&quot;),
+              set_prior(&quot;normal(0, 0.75)&quot;, class = &quot;sd&quot;, coef = &quot;Intercept&quot;, group=&quot;word&quot;)
+              )</code></pre>
+<p>Build the model:</p>
+<pre class="r"><code>model3 &lt;- brm(normF2_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = price, prior = priors3)</code></pre>
+<pre><code>## Compiling the C++ model</code></pre>
+<pre><code>## Start sampling</code></pre>
+<pre><code>## 
+## SAMPLING FOR MODEL &#39;f6033d44a78cd545630f3fd5bac49010&#39; NOW (CHAIN 1).
+## Chain 1: 
+## Chain 1: Gradient evaluation took 0.000538 seconds
+## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 5.38 seconds.
+## Chain 1: Adjust your expectations accordingly!
+## Chain 1: 
+## Chain 1: 
+## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 1: 
+## Chain 1:  Elapsed Time: 43.1625 seconds (Warm-up)
+## Chain 1:                17.9966 seconds (Sampling)
+## Chain 1:                61.1591 seconds (Total)
+## Chain 1: 
+## 
+## SAMPLING FOR MODEL &#39;f6033d44a78cd545630f3fd5bac49010&#39; NOW (CHAIN 2).
+## Chain 2: 
+## Chain 2: Gradient evaluation took 0.000281 seconds
+## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 2.81 seconds.
+## Chain 2: Adjust your expectations accordingly!
+## Chain 2: 
+## Chain 2: 
+## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 2: 
+## Chain 2:  Elapsed Time: 38.8295 seconds (Warm-up)
+## Chain 2:                18.0551 seconds (Sampling)
+## Chain 2:                56.8847 seconds (Total)
+## Chain 2: 
+## 
+## SAMPLING FOR MODEL &#39;f6033d44a78cd545630f3fd5bac49010&#39; NOW (CHAIN 3).
+## Chain 3: 
+## Chain 3: Gradient evaluation took 0.000288 seconds
+## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 2.88 seconds.
+## Chain 3: Adjust your expectations accordingly!
+## Chain 3: 
+## Chain 3: 
+## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 3: 
+## Chain 3:  Elapsed Time: 40.7721 seconds (Warm-up)
+## Chain 3:                18.0335 seconds (Sampling)
+## Chain 3:                58.8056 seconds (Total)
+## Chain 3: 
+## 
+## SAMPLING FOR MODEL &#39;f6033d44a78cd545630f3fd5bac49010&#39; NOW (CHAIN 4).
+## Chain 4: 
+## Chain 4: Gradient evaluation took 0.000287 seconds
+## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 2.87 seconds.
+## Chain 4: Adjust your expectations accordingly!
+## Chain 4: 
+## Chain 4: 
+## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+## Chain 4: 
+## Chain 4:  Elapsed Time: 42.3851 seconds (Warm-up)
+## Chain 4:                17.9947 seconds (Sampling)
+## Chain 4:                60.3797 seconds (Total)
+## Chain 4:</code></pre>
+<p>Check the summary:</p>
+<pre class="r"><code>summary(model3)</code></pre>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: normF2_20 ~ Log_dur_z + age * Sex + (1 | participant) + (1 | word) 
+##    Data: price (Number of observations: 3104) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Group-Level Effects: 
+## ~participant (Number of levels: 28) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.07      0.01     0.06     0.10       1186 1.01
+## 
+## ~word (Number of levels: 237) 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sd(Intercept)     0.06      0.01     0.05     0.07       1017 1.00
+## 
+## Population-Level Effects: 
+##               Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## Intercept         1.04      0.03     0.98     1.10        846 1.00
+## Log_dur_z        -0.03      0.00    -0.03    -0.02       6192 1.00
+## agechild         -0.02      0.04    -0.11     0.06        707 1.00
+## SexF             -0.11      0.04    -0.19    -0.03        787 1.00
+## agechild:SexF     0.14      0.06     0.02     0.26        746 1.01
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Eff.Sample Rhat
+## sigma     0.10      0.00     0.10     0.11       5815 1.00
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Eff.Sample 
+## is a crude measure of effective sample size, and Rhat is the potential 
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>And the tidystan summary:</p>
+<pre class="r"><code>tidy_stan(model3, type = &quot;all&quot;, prob=0.89, digits = 4)</code></pre>
+<pre><code>## Warning in stddev/sqrt(ess): longer object length is not a multiple of
+## shorter object length</code></pre>
+<pre><code>## 
+## # Summary Statistics of Stan-Model
+## 
+## ## Fixed effects:
+## 
+##                estimate std.error          HDI(89%)  ratio   rhat   mcse
+##  Intercept       1.0403    0.0287 [ 0.9914  1.0851] 0.2114 1.0032 0.0010
+##  Log_dur_z      -0.0285    0.0025 [-0.0324 -0.0247] 1.5479 1.0002 0.0000
+##  Log_dur_z      -0.0285    0.0025 [-0.0324 -0.0247] 1.5479 1.0002 0.0000
+##  agechild       -0.0211    0.0412 [-0.0845  0.0520] 0.1766 1.0031 0.0016
+##  SexF           -0.1096    0.0394 [-0.1755 -0.0466] 0.1968 1.0045 0.0015
+##  agechild.SexF   0.1345    0.0571 [ 0.0422  0.2318] 0.1866 1.0051 0.0022
+## 
+## ## Random effect (Intercept: participant)
+## 
+##                        estimate std.error          HDI(89%)  ratio   rhat
+##  participant.Amanda      0.0453    0.0292 [ 0.0028  0.0961] 0.2483 1.0023
+##  participant.CB          0.0239    0.0310 [-0.0221  0.0753] 0.2393 1.0021
+##  participant.Chantelle  -0.0080    0.0282 [-0.0549  0.0366] 0.2465 1.0032
+##  participant.ChrisB     -0.0565    0.0282 [-0.1026 -0.0106] 0.2471 1.0024
+##  participant.F1          0.0597    0.0305 [ 0.0113  0.1092] 0.2632 1.0032
+##  participant.F10         0.0857    0.0304 [ 0.0400  0.1348] 0.2462 1.0029
+##  participant.F3         -0.1061    0.0295 [-0.1509 -0.0558] 0.2435 1.0022
+##  participant.F4         -0.0030    0.0305 [-0.0513  0.0475] 0.2673 1.0022
+##  participant.F7          0.0437    0.0304 [-0.0069  0.0941] 0.2735 1.0021
+##  participant.F8         -0.1062    0.0307 [-0.1558 -0.0560] 0.2569 1.0027
+##  participant.F9          0.0261    0.0299 [-0.0191  0.0761] 0.2379 1.0031
+##  participant.Ibrahim    -0.0794    0.0302 [-0.1257 -0.0316] 0.2176 1.0037
+##  participant.Jessica    -0.0882    0.0289 [-0.1317 -0.0387] 0.2508 1.0024
+##  participant.Lola        0.0539    0.0286 [ 0.0089  0.1019] 0.2591 1.0023
+##  participant.Lucy        0.0165    0.0296 [-0.0308  0.0639] 0.2546 1.0032
+##  participant.M1         -0.0453    0.0308 [-0.0978  0.0007] 0.2250 1.0007
+##  participant.M3          0.0807    0.0310 [ 0.0293  0.1297] 0.2319 1.0004
+##  participant.M4          0.0767    0.0303 [ 0.0279  0.1262] 0.2225 1.0000
+##  participant.M5         -0.0445    0.0300 [-0.0917  0.0047] 0.2196 1.0004
+##  participant.M6         -0.0527    0.0305 [-0.1022 -0.0050] 0.2122 1.0004
+##  participant.M7          0.0026    0.0304 [-0.0435  0.0533] 0.2180 1.0004
+##  participant.M8         -0.0221    0.0306 [-0.0684  0.0311] 0.2214 1.0002
+##  participant.Matisse    -0.0223    0.0301 [-0.0715  0.0259] 0.2243 1.0027
+##  participant.Omar        0.1751    0.0312 [ 0.1227  0.2214] 0.2529 1.0025
+##  participant.Sami       -0.0621    0.0310 [-0.1068 -0.0071] 0.2279 1.0036
+##  participant.Shantel     0.0330    0.0294 [-0.0114  0.0812] 0.2436 1.0028
+##  participant.Tariq      -0.0024    0.0310 [-0.0491  0.0494] 0.2312 1.0021
+##  participant.ZR         -0.0318    0.0318 [-0.0843  0.0190] 0.2439 1.0020
+##    mcse
+##  0.0010
+##  0.0010
+##  0.0009
+##  0.0009
+##  0.0010
+##  0.0010
+##  0.0009
+##  0.0009
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0009
+##  0.0009
+##  0.0010
+##  0.0010
+##  0.0011
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0010
+##  0.0004
+## 
+## ## Random effect (Intercept: word...ALLAI..)
+## 
+##                 estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word...ALLAI..  -0.0083    0.0524 [-0.0944  0.0714] 1.8298 0.9996 6e-04
+## 
+## ## Random effect (Intercept: word...BY..)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word...BY..  -0.0365    0.0517 [-0.1196  0.0433] 1.7668 0.9995 6e-04
+## 
+## ## Random effect (Intercept: word...I..)
+## 
+##             estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word...I..   0.0105    0.0534 [-0.0739  0.0905] 2.0736 0.9995 6e-04
+## 
+## ## Random effect (Intercept: word...MINE.S..)
+## 
+##                  estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word...MINE.S..    6e-04    0.0514 [-0.0782  0.0849] 1.9279 0.9993 6e-04
+## 
+## ## Random effect (Intercept: word...STAMPIFY..)
+## 
+##                    estimate std.error          HDI(89%)  ratio   rhat
+##  word...STAMPIFY..  -0.0067    0.0525 [-0.0855  0.0769] 2.0828 0.9993
+##   mcse
+##  6e-04
+## 
+## ## Random effect (Intercept: word)
+## 
+##                   estimate std.error          HDI(89%)  ratio   rhat
+##  word.ALAI         -0.0400    0.0517 [-0.1162  0.0472] 1.7448 1.0000
+##  word.ALIVE         0.0156    0.0497 [-0.0696  0.0907] 2.1004 0.9997
+##  word.ALLAI         0.0019    0.0463 [-0.0758  0.0714] 2.3021 0.9998
+##  word.ALRIGHT       0.0552    0.0314 [ 0.0053  0.1041] 1.8192 1.0004
+##  word.ANALYSE       0.0018    0.0517 [-0.0786  0.0832] 1.6681 1.0002
+##  word.ANXIETY      -0.0128    0.0499 [-0.0967  0.0667] 1.8510 0.9993
+##  word.APPLIED      -0.0166    0.0521 [-0.0972  0.0648] 1.7396 1.0005
+##  word.ARRIVED      -0.0516    0.0533 [-0.1453  0.0267] 2.2567 0.9994
+##  word.BEHIND        0.0010    0.0249 [-0.0390  0.0391] 1.6784 0.9992
+##  word.BESIDE       -0.0298    0.0546 [-0.1159  0.0536] 1.9077 0.9992
+##  word.BIBLE        -0.0214    0.0512 [-0.1022  0.0583] 1.9198 0.9992
+##  word.BICYCLE      -0.0341    0.0406 [-0.0958  0.0308] 2.0956 0.9998
+##  word.BICYCLES     -0.0554    0.0523 [-0.1416  0.0269] 1.6923 0.9995
+##  word.BIKE         -0.0825    0.0238 [-0.1200 -0.0440] 1.6974 0.9999
+##  word.BIKES         0.0275    0.0509 [-0.0543  0.1106] 1.7397 0.9993
+##  word.BIOLOGY      -0.0143    0.0518 [-0.0989  0.0703] 2.0774 0.9994
+##  word.BITE         -0.0596    0.0486 [-0.1370  0.0172] 1.6200 0.9995
+##  word.BITES        -0.0676    0.0520 [-0.1499  0.0146] 1.7085 0.9996
+##  word.BUTTERFLY     0.0348    0.0276 [-0.0104  0.0787] 1.9844 0.9994
+##  word.BUY          -0.0710    0.0309 [-0.1189 -0.0203] 1.7066 0.9995
+##  word.BY           -0.0656    0.0213 [-0.1002 -0.0334] 1.6169 0.9996
+##  word.BYE          -0.0550    0.0407 [-0.1144  0.0111] 1.4946 0.9994
+##  word.CHINA         0.0198    0.0528 [-0.0656  0.1046] 2.0553 0.9996
+##  word.CHINESE       0.0722    0.0416 [ 0.0087  0.1401] 1.5213 0.9993
+##  word.CLIMB        -0.0044    0.0498 [-0.0865  0.0792] 1.7227 0.9992
+##  word.CLIMBED       0.0416    0.0523 [-0.0401  0.1290] 1.5478 0.9992
+##  word.CRIED         0.0298    0.0232 [-0.0059  0.0687] 1.4893 0.9993
+##  word.CRIME        -0.0157    0.0527 [-0.0978  0.0701] 2.0789 0.9995
+##  word.CRYING        0.0108    0.0478 [-0.0571  0.0954] 1.9230 0.9994
+##  word.DAYLIGHT      0.0132    0.0525 [-0.0707  0.0895] 2.0545 0.9993
+##  word.DECIDE       -0.0168    0.0486 [-0.0966  0.0656] 2.0384 0.9995
+##  word.DESCRIBE     -0.0296    0.0525 [-0.1056  0.0598] 2.0766 0.9994
+##  word.DIAGONALLY    0.0427    0.0503 [-0.0399  0.1223] 1.7341 0.9998
+##  word.DIE           0.0402    0.0346 [-0.0192  0.0935] 1.8434 0.9995
+##  word.DIED          0.0057    0.0512 [-0.0851  0.0846] 1.7765 0.9997
+##  word.DIES          0.0155    0.0441 [-0.0570  0.0878] 1.9935 0.9997
+##  word.DIET         -0.0068    0.0257 [-0.0466  0.0343] 1.7313 0.9994
+##  word.DINOSAURS     0.0014    0.0503 [-0.0784  0.0856] 2.5772 0.9996
+##  word.DIRECTION     0.0065    0.0507 [-0.0754  0.0869] 1.9253 0.9994
+##  word.DIRECTLY      0.0276    0.0498 [-0.0571  0.1038] 1.9987 0.9996
+##  word.DISGUISE      0.0483    0.0528 [-0.0376  0.1298] 1.7854 0.9994
+##  word.DIVIDED      -0.0483    0.0523 [-0.1335  0.0339] 1.7016 0.9991
+##  word.DRIVE         0.0245    0.0450 [-0.0527  0.0941] 1.8932 0.9992
+##  word.DRIVER       -0.0111    0.0401 [-0.0732  0.0521] 1.6810 1.0004
+##  word.DRIVING       0.0016    0.0421 [-0.0657  0.0669] 2.0877 0.9991
+##  word.DYING         0.0229    0.0506 [-0.0589  0.1039] 1.9267 0.9992
+##  word.EITHER       -0.0063    0.0421 [-0.0724  0.0626] 1.8778 0.9993
+##  word.ENTITLED      0.0116    0.0540 [-0.0663  0.1039] 2.2395 0.9995
+##  word.EYES          0.0430    0.0341 [-0.0108  0.0959] 1.6242 0.9995
+##  word.FIGHT        -0.0854    0.0199 [-0.1175 -0.0550] 1.4928 0.9998
+##  word.FIGHTING     -0.0703    0.0446 [-0.1382 -0.0008] 1.7276 0.9993
+##  word.FIGHTS       -0.0281    0.0374 [-0.0924  0.0308] 1.7583 0.9997
+##  word.FINAL        -0.0436    0.0493 [-0.1133  0.0381] 1.6813 1.0001
+##  word.FIND         -0.0690    0.0198 [-0.1016 -0.0403] 1.3493 0.9993
+##  word.FINDING      -0.0740    0.0466 [-0.1511 -0.0004] 1.6437 0.9993
+##  word.FINE         -0.0346    0.0387 [-0.0952  0.0288] 2.0973 0.9991
+##  word.FIVE         -0.1042    0.0116 [-0.1231 -0.0864] 0.7212 1.0002
+##  word.FIVES        -0.0210    0.0529 [-0.1059  0.0595] 2.4145 0.9997
+##  word.FLY          -0.0605    0.0425 [-0.1301  0.0078] 1.3707 0.9997
+##  word.FLYING       -0.0333    0.0358 [-0.0935  0.0194] 1.8190 0.9994
+##  word.FRIDAY        0.0282    0.0516 [-0.0539  0.1116] 1.7883 0.9995
+##  word.FRIGHTENED    0.0004    0.0513 [-0.0813  0.0847] 2.1646 0.9992
+##  word.GOT          -0.0158    0.0490 [-0.0922  0.0725] 2.0755 0.9996
+##  word.GRIME        -0.0237    0.0419 [-0.0941  0.0451] 2.0554 0.9994
+##  word.GRIND         0.0286    0.0529 [-0.0479  0.1147] 1.8598 0.9993
+##  word.GUY           0.1061    0.0159 [ 0.0809  0.1311] 1.4374 0.9999
+##  word.GUYS          0.0401    0.0413 [-0.0263  0.1077] 1.8540 1.0001
+##  word.HI            0.1145    0.0557 [ 0.0281  0.2036] 1.0882 0.9997
+##  word.HIDE          0.0523    0.0480 [-0.0193  0.1267] 1.6551 0.9992
+##  word.HIDED         0.0296    0.0516 [-0.0578  0.1092] 2.0223 0.9993
+##  word.HIDING       -0.0382    0.0465 [-0.1094  0.0401] 2.1027 0.9992
+##  word.HIGH          0.0007    0.0206 [-0.0334  0.0329] 1.4774 1.0000
+##  word.HIGHER       -0.0532    0.0510 [-0.1310  0.0296] 1.5964 0.9995
+##  word.HIGHEST       0.0010    0.0500 [-0.0777  0.0845] 2.0007 0.9993
+##  word.HIVE          0.0051    0.0472 [-0.0693  0.0788] 2.2531 0.9993
+##  word.HOUSEWIFE    -0.0230    0.0544 [-0.1091  0.0610] 1.9417 0.9997
+##  word.HOUSEWIVES   -0.0196    0.0518 [-0.1013  0.0655] 1.9896 0.9998
+##  word.HYPER         0.0314    0.0518 [-0.0526  0.1135] 2.2332 0.9996
+##  word.I             0.0331    0.0073 [ 0.0209  0.0450] 0.5083 1.0005
+##  word.ICE           0.0440    0.0256 [ 0.0070  0.0845] 1.6174 0.9993
+##  word.ICECREAM      0.0331    0.0523 [-0.0443  0.1198] 1.7753 0.9994
+##  word.ICED         -0.0409    0.0519 [-0.1255  0.0444] 2.1310 0.9996
+##  word.INSIDE        0.0050    0.0227 [-0.0308  0.0426] 1.5715 0.9992
+##  word.INVITE       -0.0606    0.0508 [-0.1437  0.0185] 1.7364 0.9991
+##  word.IRISH         0.0187    0.0311 [-0.0313  0.0689] 1.9976 0.9995
+##  word.ISLANDS       0.0234    0.0515 [-0.0606  0.1058] 1.9918 0.9992
+##  word.ISOLATION     0.0154    0.0541 [-0.0658  0.1032] 1.6508 1.0005
+##  word.JULY         -0.0289    0.0408 [-0.0931  0.0340] 1.9166 0.9997
+##  word.KIND          0.0996    0.0352 [ 0.0439  0.1570] 1.4620 0.9996
+##  word.KINDA         0.0222    0.0398 [-0.0394  0.0872] 2.0045 0.9997
+##  word.KINDNESS     -0.0124    0.0458 [-0.0915  0.0592] 2.0185 0.9990
+##  word.KITE          0.0350    0.0161 [ 0.0091  0.0597] 1.3371 0.9997
+##  word.KITES        -0.0295    0.0531 [-0.1107  0.0576] 1.7698 0.9992
+##  word.KNIFE         0.0267    0.0302 [-0.0215  0.0737] 1.5281 0.9994
+##  word.KNIVES        0.0184    0.0425 [-0.0504  0.0841] 1.8462 0.9992
+##  word.LIBRARY      -0.0158    0.0486 [-0.0977  0.0625] 2.1541 0.9998
+##  word.LIE           0.0173    0.0330 [-0.0326  0.0735] 1.6553 0.9997
+##  word.life          0.0020    0.0520 [-0.0816  0.0850] 2.0854 0.9992
+##  word.LIFE          0.0066    0.0199 [-0.0260  0.0376] 1.3852 0.9998
+##  word.LIGHT         0.0215    0.0314 [-0.0293  0.0710] 1.9528 0.9993
+##  word.LIGHTER      -0.0035    0.0517 [-0.0846  0.0775] 2.2503 0.9996
+##  word.LIGHTS        0.0087    0.0426 [-0.0644  0.0775] 2.3571 0.9995
+##  word.LIKE          0.0458    0.0072 [ 0.0340  0.0576] 0.4758 1.0011
+##  word.LIKED        -0.0297    0.0407 [-0.0987  0.0294] 2.1385 0.9999
+##  word.LIKES         0.0239    0.0530 [-0.0589  0.1078] 1.8228 0.9992
+##  word.LINE          0.0466    0.0352 [-0.0088  0.1094] 1.7163 0.9993
+##  word.LINES        -0.0121    0.0434 [-0.0766  0.0577] 2.1674 0.9996
+##  word.LION         -0.0466    0.0346 [-0.1030  0.0058] 1.7086 0.9992
+##  word.LIVE         -0.0093    0.0521 [-0.0877  0.0779] 1.7747 1.0000
+##  word.LIVES         0.0062    0.0529 [-0.0786  0.0930] 1.9609 0.9998
+##  word.LYING        -0.0381    0.0373 [-0.0985  0.0195] 1.8935 0.9993
+##  word.MANKIND       0.0069    0.0517 [-0.0763  0.0910] 1.9900 0.9998
+##  word.MICE          0.0138    0.0523 [-0.0687  0.0950] 2.1788 0.9997
+##  word.MICHAEL       0.0187    0.0505 [-0.0636  0.0983] 2.0069 0.9994
+##  word.MICROPHONE    0.0044    0.0438 [-0.0615  0.0732] 1.8134 0.9992
+##  word.MIGHT         0.0072    0.0276 [-0.0373  0.0521] 1.8104 0.9996
+##  word.MIND         -0.0304    0.0307 [-0.0760  0.0186] 1.7312 0.9994
+##  word.MINE         -0.0646    0.0179 [-0.0927 -0.0353] 1.5347 0.9999
+##  word.MINES        -0.0278    0.0468 [-0.1010  0.0475] 2.1753 0.9997
+##  word.MISTYPE      -0.0196    0.0428 [-0.0845  0.0531] 2.0697 0.9995
+##  word.MOTORCYCLES  -0.0052    0.0530 [-0.0896  0.0802] 1.6559 0.9998
+##  word.MULTIPLY      0.0138    0.0519 [-0.0737  0.0958] 1.9968 0.9996
+##  word.MY           -0.0833    0.0088 [-0.0970 -0.0692] 0.5737 1.0001
+##  word.MYSELF       -0.0786    0.0350 [-0.1354 -0.0244] 1.5528 0.9998
+##  word.NEITHER       0.0326    0.0534 [-0.0486  0.1198] 1.8483 0.9997
+##  word.NICE          0.0661    0.0315 [ 0.0118  0.1135] 1.5321 0.9994
+##  word.NICELY        0.0572    0.0530 [-0.0322  0.1389] 1.4153 0.9993
+##  word.NIGERIANS    -0.0018    0.0498 [-0.0811  0.0833] 2.1993 0.9997
+##  word.NIGHT         0.0604    0.0332 [ 0.0106  0.1134] 1.8082 0.9998
+##  word.NIGHTS       -0.0281    0.0491 [-0.1081  0.0509] 1.5912 0.9994
+##  word.NIKE          0.0274    0.0479 [-0.0474  0.1043] 2.1782 0.9996
+##  word.NINE          0.0317    0.0179 [ 0.0003  0.0581] 1.3438 0.9994
+##  word.NINETEEN      0.0486    0.0372 [-0.0099  0.1063] 1.6244 0.9995
+##  word.NINETY        0.0754    0.0364 [ 0.0144  0.1312] 1.8852 0.9991
+##  word.NINTH         0.0023    0.0457 [-0.0747  0.0723] 1.9726 0.9991
+##  word.OH            0.0352    0.0528 [-0.0489  0.1157] 2.1578 0.9996
+##  word.OUTSIDE      -0.0038    0.0280 [-0.0479  0.0407] 2.0186 1.0001
+##  word.PALESTINE    -0.0595    0.0529 [-0.1365  0.0280] 1.6704 0.9993
+##  word.PARADISE      0.0334    0.0514 [-0.0488  0.1177] 1.9625 0.9994
+##  word.PIE          -0.0331    0.0505 [-0.1132  0.0511] 2.3062 0.9996
+##  word.PIKIES        0.0187    0.0526 [-0.0648  0.1008] 1.9443 0.9991
+##  word.PLAYTIME      0.0128    0.0524 [-0.0776  0.0880] 2.3317 0.9993
+##  word.POLITE       -0.0042    0.0500 [-0.0908  0.0707] 2.3598 0.9991
+##  word.PRIDE        -0.0235    0.0390 [-0.0888  0.0370] 2.1900 0.9995
+##  word.PRIDES       -0.0103    0.0517 [-0.0963  0.0701] 2.0008 0.9995
+##  word.PRIMARK      -0.0245    0.0543 [-0.1052  0.0611] 2.1102 0.9996
+##  word.PRIMARY      -0.0581    0.0349 [-0.1110 -0.0006] 1.7500 0.9993
+##  word.PRIVACY       0.0249    0.0540 [-0.0535  0.1169] 1.7567 0.9995
+##  word.PRIZE         0.0329    0.0467 [-0.0436  0.1064] 2.2866 0.9995
+##  word.QUIET        -0.0423    0.0414 [-0.1058  0.0253] 1.9778 0.9994
+##  word.QUITE        -0.0435    0.0328 [-0.0975  0.0072] 1.6868 0.9997
+##  word.REALISE       0.0050    0.0511 [-0.0793  0.0879] 2.1273 0.9994
+##  word.REALISED      0.0536    0.0472 [-0.0223  0.1302] 1.4785 0.9996
+##  word.RECOGNISING   0.0450    0.0524 [-0.0361  0.1262] 1.7811 0.9993
+##  word.REMINDS       0.0182    0.0504 [-0.0684  0.1000] 1.8265 0.9993
+##  word.REPLIED       0.0056    0.0541 [-0.0755  0.0932] 1.9732 0.9994
+##  word.REPLY         0.0168    0.0470 [-0.0589  0.0900] 1.4868 0.9999
+##  word.RIDE          0.0020    0.0507 [-0.0785  0.0854] 2.1969 0.9991
+##  word.RIDING       -0.0188    0.0288 [-0.0669  0.0278] 1.7455 0.9992
+##  word.RIGHT        -0.0224    0.0212 [-0.0591  0.0102] 1.5059 0.9995
+##  word.RIGHTS        0.0026    0.0477 [-0.0715  0.0788] 2.0395 0.9998
+##  word.SHINE         0.0382    0.0414 [-0.0286  0.1066] 1.8113 0.9998
+##  word.SHINY         0.0243    0.0520 [-0.0600  0.1077] 1.7689 0.9995
+##  word.SHY           0.0090    0.0460 [-0.0619  0.0847] 2.0731 0.9994
+##  word.SIDE          0.0085    0.0257 [-0.0341  0.0495] 1.6029 0.9992
+##  word.SIGN          0.0023    0.0332 [-0.0557  0.0523] 1.8827 0.9997
+##  word.SILENCE      -0.0097    0.0543 [-0.0913  0.0819] 2.6249 0.9992
+##  word.SITE         -0.0181    0.0523 [-0.0986  0.0652] 1.8673 0.9992
+##  word.SIZE         -0.0236    0.0548 [-0.1098  0.0598] 2.0226 0.9991
+##  word.SKY          -0.0502    0.0452 [-0.1214  0.0217] 1.9525 0.9992
+##  word.SLICE         0.0084    0.0394 [-0.0562  0.0696] 2.2371 0.9993
+##  word.SLICED        0.0031    0.0530 [-0.0790  0.0856] 1.6511 0.9996
+##  word.SLICING      -0.0902    0.0552 [-0.1735 -0.0034] 1.5610 0.9997
+##  word.SLIDE         0.0060    0.0198 [-0.0234  0.0384] 1.2398 0.9993
+##  word.SLIDING       0.0652    0.0367 [ 0.0082  0.1220] 1.7892 0.9996
+##  word.SLIGHTLY      0.0170    0.0506 [-0.0601  0.1019] 1.9486 0.9996
+##  word.SOCIALISE     0.0093    0.0522 [-0.0709  0.0954] 2.2497 0.9993
+##  word.SOCIALIZED    0.0154    0.0533 [-0.0665  0.0978] 1.7516 0.9995
+##  word.SOCIETY       0.0259    0.0423 [-0.0392  0.0922] 1.9715 0.9992
+##  word.SOMETIME      0.0201    0.0435 [-0.0446  0.0916] 2.0694 0.9991
+##  word.SOMETIMES     0.0174    0.0233 [-0.0177  0.0563] 1.5969 0.9994
+##  word.sp            0.0296    0.0528 [-0.0509  0.1138] 1.5721 0.9999
+##  word.SPIDER       -0.0807    0.0237 [-0.1137 -0.0409] 1.8174 0.9994
+##  word.SPIDERS       0.0085    0.0366 [-0.0471  0.0696] 2.0303 0.9996
+##  word.STABILISERS   0.0532    0.0528 [-0.0304  0.1387] 1.7969 0.9994
+##  word.STRIPES       0.0135    0.0525 [-0.0698  0.0976] 2.1558 0.9994
+##  word.STRIPEY       0.0107    0.0438 [-0.0592  0.0767] 1.9126 0.9996
+##  word.SUICIDE       0.0113    0.0465 [-0.0607  0.0870] 2.1403 0.9994
+##  word.SURPRISED    -0.0354    0.0529 [-0.1151  0.0515] 1.7315 0.9994
+##  word.SURVIVE      -0.0132    0.0502 [-0.0904  0.0685] 1.8491 0.9996
+##  word.TIED          0.0042    0.0514 [-0.0816  0.0864] 2.4487 0.9990
+##  word.TIGER         0.0543    0.0267 [ 0.0117  0.0943] 1.6164 0.9994
+##  word.TIGHT         0.0308    0.0496 [-0.0492  0.1061] 1.7726 0.9993
+##  word.TIGHTS        0.0040    0.0526 [-0.0762  0.0908] 1.8207 0.9996
+##  word.TIME          0.0175    0.0143 [-0.0042  0.0415] 1.0392 0.9996
+##  word.TIMES         0.0281    0.0240 [-0.0081  0.0676] 1.7623 0.9996
+##  word.TINIE         0.0186    0.0508 [-0.0576  0.1063] 1.5607 0.9993
+##  word.TINY          0.0592    0.0407 [-0.0007  0.1256] 1.8936 0.9991
+##  word.TRIED         0.0136    0.0224 [-0.0243  0.0469] 1.4430 0.9995
+##  word.TRIES         0.0325    0.0452 [-0.0409  0.1062] 1.8410 0.9994
+##  word.TRIPARTITE    0.0116    0.0396 [-0.0522  0.0743] 2.1527 1.0000
+##  word.TRY           0.0434    0.0283 [-0.0005  0.0883] 1.9960 0.9992
+##  word.TRYING        0.0307    0.0275 [-0.0121  0.0723] 1.4274 0.9996
+##  word.TWICE         0.0276    0.0523 [-0.0506  0.1115] 1.5296 0.9993
+##  word.TYPE          0.0097    0.0396 [-0.0567  0.0685] 1.9270 0.9996
+##  word.TYPES         0.0064    0.0465 [-0.0715  0.0799] 2.4573 0.9997
+##  word.VIBRATING    -0.0341    0.0505 [-0.1189  0.0417] 2.0036 0.9996
+##  word.WHEREBY      -0.0114    0.0514 [-0.0997  0.0647] 1.7893 0.9997
+##  word.WHITE        -0.1341    0.0149 [-0.1588 -0.1131] 1.0138 1.0005
+##  word.WHY          -0.0829    0.0137 [-0.1050 -0.0603] 1.1565 0.9999
+##  word.WIFE         -0.0462    0.0531 [-0.1308  0.0385] 1.9778 0.9994
+##  word.WINE         -0.0293    0.0505 [-0.1084  0.0583] 1.8097 0.9995
+##  word.WRITE        -0.0411    0.0319 [-0.0876  0.0150] 2.0363 0.9998
+##  word.WRITING       0.0262    0.0422 [-0.0414  0.0987] 1.9091 0.9993
+##  word.WRITNG       -0.0353    0.0520 [-0.1148  0.0537] 1.8402 0.9994
+##    mcse
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0007
+##  0.0003
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0006
+##  0.0007
+##  0.0006
+##  0.0006
+##  0.0003
+##  0.0004
+##  0.0003
+##  0.0004
+##  0.0007
+##  0.0005
+##  0.0007
+##  0.0007
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0005
+##  0.0003
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0007
+##  0.0004
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0002
+##  0.0005
+##  0.0007
+##  0.0001
+##  0.0007
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0007
+##  0.0002
+##  0.0006
+##  0.0007
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0012
+##  0.0001
+##  0.0003
+##  0.0006
+##  0.0007
+##  0.0003
+##  0.0006
+##  0.0003
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0004
+##  0.0004
+##  0.0006
+##  0.0002
+##  0.0007
+##  0.0003
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0007
+##  0.0002
+##  0.0003
+##  0.0005
+##  0.0010
+##  0.0001
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0003
+##  0.0004
+##  0.0002
+##  0.0005
+##  0.0005
+##  0.0006
+##  0.0011
+##  0.0001
+##  0.0004
+##  0.0007
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0007
+##  0.0002
+##  0.0004
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0007
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0007
+##  0.0005
+##  0.0006
+##  0.0004
+##  0.0002
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0003
+##  0.0003
+##  0.0006
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0007
+##  0.0008
+##  0.0002
+##  0.0004
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0005
+##  0.0003
+##  0.0006
+##  0.0003
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0006
+##  0.0005
+##  0.0006
+##  0.0003
+##  0.0006
+##  0.0008
+##  0.0002
+##  0.0003
+##  0.0006
+##  0.0005
+##  0.0003
+##  0.0005
+##  0.0005
+##  0.0004
+##  0.0003
+##  0.0006
+##  0.0004
+##  0.0006
+##  0.0006
+##  0.0008
+##  0.0002
+##  0.0002
+##  0.0006
+##  0.0006
+##  0.0004
+##  0.0005
+##  0.0018
+## 
+## ## Random effect (Intercept: word.BIBLE)
+## 
+##               estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.BIBLE.S   -0.038    0.0513 [-0.1231  0.0449] 1.8043 0.9995 6e-04
+## 
+## ## Random effect (Intercept: word.GUY)
+## 
+##             estimate std.error         HDI(89%)  ratio   rhat  mcse
+##  word.GUY.S   0.1069    0.0331 [0.0546  0.1609] 1.6051 0.9994 4e-04
+## 
+## ## Random effect (Intercept: word.I)
+## 
+##            estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.I.D    0.0477    0.0525 [-0.0381  0.1289] 1.9236 0.9995 6e-04
+##  word.I.M   -0.0270    0.0246 [-0.0648  0.0123] 1.8019 0.9998 3e-04
+##  word.I.ve   0.0058    0.0540 [-0.0767  0.0904] 1.7971 0.9993 6e-04
+##  word.I.VE   0.0419    0.0445 [-0.0278  0.1122] 2.1302 0.9991 5e-04
+## 
+## ## Random effect (Intercept: word.ICING)
+## 
+##               estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.ICING.S   0.0434    0.0501 [-0.0396  0.1204] 1.6101 0.9993 6e-04
+## 
+## ## Random effect (Intercept: word.KITE)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.KITE.S   0.0318    0.0542 [-0.0544  0.1132] 1.5396 0.9994 6e-04
+## 
+## ## Random effect (Intercept: word.LIFE)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.LIFE.S   0.0055     0.051 [-0.0760  0.0910] 2.3098 0.9994 6e-04
+## 
+## ## Random effect (Intercept: word.LION)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.LION.S   0.0313    0.0395 [-0.0341  0.0924] 2.0939 0.9996 5e-04
+## 
+## ## Random effect (Intercept: word.MINE)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.MINE.S  -0.0497    0.0254 [-0.0930 -0.0097] 1.6053 0.9994 3e-04
+## 
+## ## Random effect (Intercept: word.S)
+## 
+##                 estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.S.ALRIGHT  -0.0616    0.0529 [-0.1434  0.0249] 1.6706 0.9993 6e-04
+## 
+## ## Random effect (Intercept: word.SPIDER)
+## 
+##                estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.SPIDER.S   -0.047     0.039 [-0.1081  0.0173] 1.8631 0.9993 4e-04
+## 
+## ## Random effect (Intercept: word.TIGER)
+## 
+##               estimate std.error         HDI(89%) ratio   rhat  mcse
+##  word.TIGER.S   0.0759    0.0346 [0.0208  0.1302] 1.909 0.9994 4e-04
+## 
+## ## Random effect (Intercept: word.TIME)
+## 
+##              estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.TIME.S    4e-04    0.0513 [-0.0836  0.0823] 2.1584 0.9996 6e-04
+## 
+## ## Random effect (Intercept: word.VIBRATE)
+## 
+##                 estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.VIBRATE.S  -0.0343    0.0498 [-0.1193  0.0419] 1.7891 0.9993 6e-04
+## 
+## ## Random effect (Intercept: word.WHY)
+## 
+##             estimate std.error          HDI(89%)  ratio   rhat  mcse
+##  word.WHY.S   0.0516    0.0539 [-0.0402  0.1316] 1.8037 0.9993 6e-04</code></pre>
+<div id="plotting-bayesian-output-2" class="section level3">
+<h3>Plotting Bayesian output</h3>
+</div>
+</div>
+<div id="price-trajectory-length" class="section level2">
+<h2>PRICE Trajectory Length</h2>
+<div id="plotting-bayesian-output-3" class="section level3">
+<h3>Plotting Bayesian output</h3>
+</div>
+</div>
+</div>
+<div id="goat" class="section level1">
+<h1>GOAT</h1>
+<div id="goat-f2-at-20" class="section level2">
+<h2>GOAT F2 at 20%</h2>
+<div id="plotting-bayesian-output-4" class="section level3">
+<h3>Plotting Bayesian output</h3>
+</div>
+</div>
+<div id="goat-trajectory-length" class="section level2">
+<h2>GOAT Trajectory Length</h2>
+<div id="plotting-bayesian-output-5" class="section level3">
+<h3>Plotting Bayesian output</h3>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

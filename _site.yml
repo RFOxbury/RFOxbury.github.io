@@ -13,6 +13,8 @@ navbar:
       href: papers_and_presentations.html
     - text: "Scrapbook"
       menu:
+        - text: "ICPhS: vowel plot"
+          href: icphs_plotting.html
         - text: "Normalisation"
           href: normalisation_oct25.html
         - text: "Representing vowel changes"

@@ -1,0 +1,413 @@
+---
+title: 'ICPhS: regression analyses'
+author: "Rosie Oxbury"
+date: "10/08/2019"
+output: html_document
+---
+
+Below is the code (a) for the statistical analysis Oxbury & McCarthy did for their ICPhS 2019 poster, and (b) for the violin plots that appeared at the bottom of the poster.
+
+<img src="icphs_poster.png" style="width:50%; margin-right: 20px" align="centre">
+
+# Cleaning
+
+First, load necessary packages:
+```{r}
+library(tidyverse)
+library(brms)
+library(sjstats)
+library(bayesplot)
+```
+
+Load in the data:
+```{r}
+diphs <- read_csv("icphs_data.csv")
+```
+
+Alter duration so that (a) there are no tokens with duration longer than 0.75 seconds, and (b) it is log-transformed.
+
+```{r}
+ggplot(diphs, aes(x = duration, fill = age)) + geom_histogram(bins = 100)
+```
+Filter so that duration has to be less than 0.75, then see what it looks like.
+
+```{r}
+diphs2 <- diphs %>% filter(duration < 0.75)
+```
+
+See what it looks like log-transformed:
+```{r}
+ggplot(diphs2, aes(x = log10(duration), fill = age)) + geom_histogram(bins = 100)
+```
+
+```{r}
+diphs3 <- mutate(diphs2,
+               LogDur = log10(duration))
+```
+
+... and standardize it
+```{r}
+diphs3 <- mutate(diphs3,
+               Log_dur_z = scale(LogDur))
+```
+
+Check that all the other variables are OK. Convert some of them to factors
+```{r}
+str(diphs3)
+```
+
+Age as factor and sex as factor
+```{r}
+diphs3$age <- as.factor(diphs3$age)
+diphs3$gender <- as.factor(diphs3$gender)
+```
+
+Participant and word as factors too
+```{r}
+diphs3$participant <- as.factor(diphs3$participant)
+diphs3$word <- as.factor(diphs3$word)
+```
+
+Change the gender variable to sex
+```{r}
+diphs3 <- diphs3 %>% rename(Sex = gender)
+```
+
+Finally, we are going to recode that variable so that male becomes the reference level in the models we build.
+```{r}
+diphs3$Sex <- relevel(diphs3$Sex, ref = "M")
+```
+
+
+Now onto some modelling.
+
+# FACE
+
+Make the subset:
+```{r}
+face <- diphs3 %>% filter(sound_label == "face")
+```
+
+## FACE F1
+
+N.B. in the real analysis, I checked the distribution of the dependent and independent variables, looked for outliers and so on... I am not putting all of that here because it would make the page pretty long :)
+
+OK, now we should probably set some priors.
+
+Check distribution of each of these to know what is a normal range:
+```{r}
+ggplot(face, aes(x=Log_dur_z)) + geom_histogram(bins = 100)
+
+ggplot(face, aes(x=age, y = normF1_20, fill = Sex)) + geom_violin()
+```
+
+Find out what priors we need:
+```{r}
+get_prior(normF1_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face)
+```
+
+Create the priors:
+```{r}
+priors.1 <- c(set_prior("normal(1, 0.75)", class = "Intercept"),
+              set_prior("normal(0, 0.1)", class = "b", coef = "Log_dur_z"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "agechild"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "SexF"),
+              set_prior("normal(0, 1)", class = "b", coef = "agechild:SexF"), #2*age effect to allow for complete reversal
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="participant"),
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="word")
+              )
+```
+
+
+And make the model:
+```{r}
+model1.1 <- brm(normF1_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face, prior = priors.1)
+```
+
+Have a look at the model summary:
+```{r}
+summary(model1.1)
+```
+
+This summary indicates that:
+
+- A 1 Z-score increase in duration predicts a 0.04 increase in F1 at 20%. 95% of the posterior distribution is between 0.03 and 0.04 for this coefficient.
+
+- Although the coefficient for the age variable is larger in absolute terms than that for duration, the posterior distribution is flatter, and the 95% credible interval includes 0.
+
+- The posterior on the coefficient for Sex is centred at 0! So there really seems to be no effect of Sex. Similarly, the coefficient for the age-sex interaction is not very impressive.
+
+A different kind of output:
+```{r}
+tidy_stan(model1.1, prob=0.89, type="all", digits=4)
+```
+The authors of this other package recommend (a) using 89% credible interval, rather than 95%, for not-so-big data; and (b) looking at where the majority of the posterior distribution lies, not the 95%/89% that is symmetrical about the point estimate. See in the plots how the blue area is not necessarily symmetrical about the point estimate:
+
+```{r}
+posterior1 <- as.matrix(model1.1)
+
+#dimnames(posterior)
+mcmc_areas(posterior1,
+           pars = c("b_Intercept", 
+                    "b_Log_dur_z",
+                    "b_agechild", 
+                    "b_SexF", 
+                    "b_agechild:SexF"),
+           prob=0.89)
+```
+This plot gives us an idea of how confident to be about the effects of different predictors. Not only are the coefficients for age, sex and their interaction close to zero, the posterior distributions over these parameters are pretty flat compared with e.g. the posterior distribution for duration.
+
+This tidy_stan also gives us all the random intercepts, which is pretty nice, especially the ones for speakers.
+
+### Plotting Bayesian output
+
+Plot marginal effects
+```{r fig1}
+marg1 <- marginal_effects(model1.1, ask = FALSE)
+
+plot(marg1, plot = FALSE)[[2]]
+```
+
+Save the numbers needed for an interaction plot to a tibble:
+```{r}
+faceF1 <- as.data.frame(marg1[4])
+```
+
+Set up the colour palette and the position dodge that we'll be using for all of these plots:
+```{r}
+binary <- c("#E69F00", "#56B4E9")
+
+pd <- position_dodge(0.9)
+```
+
+
+
+```{r fig.width=8, fig.height=8}
+o1 <- ggplot(data = face, aes(x = age, y = normF1_20, fill = Sex)) + 
+  geom_violin(color = NA) + 
+  geom_boxplot(width = 0.3, color = "#999999", position = pd) +
+  theme_minimal() + 
+  scale_fill_manual(values = binary) +
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size = rel(2.5)),
+        legend.text = element_text(size = rel(2.5)),
+        axis.title = element_text(size = rel(3.5)), 
+        axis.text = element_text(size = rel(3)), 
+        plot.title = element_text(size = rel(3.5)), 
+        plot.margin=unit(c(0.7,0.7,0.7,0.7),"cm")) +
+  labs(x = "Age", y = "Normalized F1 at 20%", 
+       title = "FACE: normalized F1 at onset (20%)")
+
+o1
+
+```
+
+```{r}
+str(faceF1)
+```
+Define columns to keep:
+```{r}
+keep1 <- c("age.Sex.age", "age.Sex.Sex", "age.Sex.estimate__", "age.Sex.se__", "age.Sex.lower__", "age.Sex.upper__")
+```
+Perform "select":
+```{r}
+faceF1_2 <- faceF1 %>% select(keep1)
+```
+Rename columns:
+```{r}
+colnames(faceF1_2) <- c("age","Sex","normF1_20", "SE","lower", "upper")
+```
+
+
+Add error bars
+```{r fig.width=8, fig.height=8}
+o2 <- o1 + geom_point(data = faceF1_2, aes(x=age, y=normF1_20, group = Sex),
+                      position = pd,
+                      size = 4) +
+  geom_errorbar(data = faceF1_2, 
+                aes(ymin=lower, ymax=upper), 
+                width=.1,
+                size=1,
+                position = pd)
+
+o2
+```
+
+## FACE trajectory
+As with FACE F1, note that I have done exploratory analysis of the distribution of the dependent variable in relation to its predictors, but I am not going to do all that here because it would take up lots of space...
+
+Check distribution of TL in relation to duration (log10-transformed and Z-scored), age and sex:
+```{r}
+ggplot(face, aes(x=Log_dur_z)) + geom_histogram(bins = 100)
+
+ggplot(face, aes(x=age, y = norm_TL, fill = Sex)) + geom_violin()
+```
+
+
+Define the priors:
+```{r}
+priors2 <- c(set_prior("normal(0.75, 0.75)", class = "Intercept"), # set a prior for the intercept
+              set_prior("normal(0, 2)", class = "b", coef = "Log_dur_z"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "agechild"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "SexF"),
+              set_prior("normal(0, 1.5)", class = "b", coef = "agechild:SexF"), #2*age effect to allow for complete reversal
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="participant"),
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="word")
+              )
+```
+
+And build the model:
+```{r}
+model2 <- brm(norm_TL ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = face, prior = priors2)
+```
+
+Check the model summary
+```{r}
+summary(model2)
+```
+So, as regards the trajectory of FACE:
+
+- longer duration = greater Trajectory Length i.e. more movement in the diphthong. This is to be expected really with diphthongs. The 95% credible interval is narrow, bounded at 0.05 and 0.07, so we are pretty confident that duration has a positive relationship with TL.
+
+- Being a child (male) as opposed to adolescent (male) also predicts longer trajectory. The coefficients and 95% credible intervals are actually identical for the age and sex predictors. The 95% credible interval for each is (0.02, 0.12).
+
+- There is an interaction of age and sex that counterbalances the age effect. 0.07 + -0.1 = -0.03, so the difference between adolescent males and female children is estimated at -0.03? i.e. female children have smaller TL i.e. are more monophthongal than male adolescents?
+
+The tidy_stan summary:
+```{r}
+tidy_stan(model2, prob = 0.89, type = "all", digits = 8)
+```
+The tidy_stan summary with HPDI 89% credible intervals and the ordinary summary with 95% symmetrical credible intervals agree with each other, which is good -- shows the effects aren't flimsy.
+
+Plot the posteriors of the fixed effects with 89% HPDI credible intervals:
+```{r}
+posterior2 <- as.matrix(model2)
+
+#dimnames(posterior2)
+
+mcmc_areas(posterior2,
+           pars = c("b_Intercept", 
+                    "b_Log_dur_z",
+                    "b_agechild", 
+                    "b_SexF", 
+                    "b_agechild:SexF"),
+           prob=0.89)
+```
+
+### Plotting Bayesian output
+
+Plot marginal_effects:
+```{r}
+marg2 <- marginal_effects(model2, ask = FALSE)
+
+p <- plot(marg2, plot = FALSE)[[4]]
+
+p  + theme_minimal() + labs(y = "Normalized Trajectory Length", x = "Age")
+```
+
+Save marg2 to a new df:
+```{r}
+face_traj <- as.data.frame(marg2[4])
+```
+Check structure
+```{r}
+str(face_traj)
+```
+Define columns to keep:
+```{r}
+keep1 <- c("age.Sex.age", "age.Sex.Sex", "age.Sex.estimate__", "age.Sex.se__", "age.Sex.lower__", "age.Sex.upper__")
+```
+Perform "select":
+```{r}
+face_traj2 <- face_traj %>% select(keep1)
+```
+Rename columns:
+```{r}
+colnames(face_traj2) <- c("age","Sex","norm_TL", "SE","lower", "upper")
+```
+
+Plot it:
+```{r fig.width=8, fig.height=8}
+f <- ggplot(face, aes(x = age, y = norm_TL, fill = Sex)) + 
+  geom_violin(color = NA) + 
+  geom_boxplot(width = 0.3, position = position_dodge(0.9), color = "#999999") + 
+  theme_minimal() + 
+  scale_fill_manual(values = binary) + 
+   theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        legend.title = element_text(size = rel(1.5)),
+        legend.text = element_text(size = rel(1.5)),
+        axis.title = element_text(size = rel(2)), 
+        axis.text = element_text(size = rel(1.5)), 
+        plot.title = element_text(size = rel(2))) +
+  labs(x = "Age", y = "Trajectory Length", title = "FACE: Trajectory Length") +
+  ylim(0, 2)
+f
+```
+
+```{r fig.width=8, fig.height=8}
+f2 <- f + geom_point(data = face_traj2, aes(x=age, y=norm_TL), size = 4, position = pd) +
+  geom_errorbar(data = face_traj2, aes(ymin=lower, ymax=upper), width=.1, size = 1, position = pd)
+
+f2
+```
+
+
+# PRICE
+Create the subset:
+```{r}
+price <- diphs3 %>% filter(sound_label == "price")
+```
+
+## PRICE F2 at 20%
+
+Figure out what priors we need:
+```{r}
+get_prior(normF2_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = price)
+```
+
+Check distribution of the dependent variable conditional on the independent variables:
+```{r}
+ggplot(price, aes(x=age, y = normF2_20, fill = Sex)) + geom_violin()
+```
+
+
+Set some priors:
+```{r}
+priors3 <- c(set_prior("normal(1, 1)", class = "Intercept"), #
+              set_prior("normal(0, 2)", class = "b", coef = "Log_dur_z"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "agechild"),
+              set_prior("normal(0, 0.75)", class = "b", coef = "SexF"),
+              set_prior("normal(0, 1.5)", class = "b", coef = "agechild:SexF"), #2*age effect to allow for complete reversal
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="participant"),
+              set_prior("normal(0, 0.75)", class = "sd", coef = "Intercept", group="word")
+              )
+```
+
+Build the model:
+```{r}
+model3 <- brm(normF2_20 ~ Log_dur_z + age*Sex + (1|participant) + (1|word), data = price, prior = priors3)
+```
+
+Check the summary:
+```{r}
+summary(model3)
+```
+
+And the tidystan summary:wr
+
+
+
+### Plotting Bayesian output
+
+## PRICE Trajectory Length
+### Plotting Bayesian output
+
+# GOAT
+
+## GOAT F2 at 20%
+### Plotting Bayesian output
+
+## GOAT Trajectory Length
+### Plotting Bayesian output
