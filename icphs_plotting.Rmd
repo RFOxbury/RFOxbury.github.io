@@ -5,6 +5,8 @@ date: "10/08/2019"
 output:
   html_document:
     toc: true
+    toc_float: true
+    number_sections: true
     toc_depth: 3
 ---
 # Introduction
