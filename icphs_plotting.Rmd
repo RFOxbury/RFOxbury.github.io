@@ -2,14 +2,18 @@
 title: 'ICPhS 2019: vowel plot'
 author: "Rosie Oxbury"
 date: "10/08/2019"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
 ---
+# Introduction
 
 This notebook provides the code for the vowel plot that was shown on Oxbury & McCarthy's ICPhS poster.
 
 <img src="icphs_poster.png" style="width:50%; margin-right: 20px" align="centre">
 
-# Prep
+# Data cleaning & preparation
 
 As a first step, of course, load tidyverse.
 ```{r}

@@ -1,9 +1,17 @@
 ---
-title: "Normalization"
+title: "Vowel normalization"
 author: "Rosie Oxbury"
-output: html_document
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    toc_depth: 3
 ---
-Today I will be normalizing my PhD data using the Watt Fabricius method (Watt & Fabricius 2003).
+
+# Introduction 
+
+Today I will be normalizing my PhD data using the modified Watt Fabricius method (Fabricius, Watt & Johnson 2009).
 
 First, load the tidyverse:
 ```{r}
@@ -30,7 +38,7 @@ The children have higher F1 and F2 values in their vowels than the adolescents b
 
 To combat this, and allow us to compare children and adolescents' vowel productions in a meaningful way, we normalise. The modified Watt-Fabricius method allows us to normalise away the differences caused by physiological differences between children and adults, or men and women, whilst preserving potentially meaningful dialectal and sociolinguistic variation.
 
-###First step: inspect the data
+# First step: inspect the data
 
 Check the structure of the data:
 ```{r}
@@ -39,7 +47,7 @@ str(data)
 
 It looks fine -- phew!
 
-### Step 2: preparation
+# Step 2: preparation
 The *modified* Watt-Fabricius method works as follows:
 
 1. For each speaker, find the mean F1 and mean F2 of FLEECE - the most front and closest vowel in the system (highest F2, lowest F1)
@@ -56,7 +64,7 @@ data <- data %>% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5,
 ```
 
 
-###Mean F1 and F2 for FLEECE, TRAP and /u/
+# Mean F1 and F2 for FLEECE, TRAP and /u/
 
 This is going to be a bit complicated, so bear with me.
 
@@ -93,7 +101,7 @@ newdata <- newdata %>%
 ```
 
 
-### Grand mean for F1 and F2 per speaker
+# Grand mean for F1 and F2 per speaker
 
 Now it’s time to calculate the Grand Mean for each formant, which gets abbreviated to S. To get the grand mean, calculate the mean F1 and mean F2 by summing the F_n values for TRAP, FLEECE and /u/ and dividing by 3; store these values in the vectors ‘s_formant1’ and ‘s_formant2’.
 ```{r}
@@ -108,7 +116,7 @@ dataX <- merge(data, newdata)
 str(dataX)
 ```
 
-### Normalise!!!
+# Normalise!!!
 
 Final step: we divide every F_n observation by S_n.
 
@@ -127,7 +135,7 @@ dataX <- dataX %>% mutate(
 ```
 
 
-#Try plotting with normalized values
+# Try plotting with normalized values
 
 We can now plot the normalized data, and compare it with the plot we produced earlier. This is out unnormalized data:
 ```{r fig3, fig.width=8, fig.height=6}

@@ -12,7 +12,7 @@
 <meta name="author" content="Rosie Oxbury" />
 
 
-<title>Normalization</title>
+<title>Vowel normalization</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -261,6 +264,90 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -268,6 +355,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -320,13 +417,15 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Normalization</h1>
+<h1 class="title toc-ignore">Vowel normalization</h1>
 <h4 class="author">Rosie Oxbury</h4>
 
 </div>
 
 
-<p>Today I will be normalizing my PhD data using the Watt Fabricius method (Watt &amp; Fabricius 2003).</p>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>Today I will be normalizing my PhD data using the modified Watt Fabricius method (Fabricius, Watt &amp; Johnson 2009).</p>
 <p>First, load the tidyverse:</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
 <p>And the data:</p>
@@ -341,8 +440,9 @@ $(document).ready(function () {
 <p><img src="normalisation_oct25_files/figure-html/fig2-1.png" width="768" /></p>
 <p>The children have higher F1 and F2 values in their vowels than the adolescents because the children tend to have higher fundamental frequency (F0) or voice pitch than the adolescents - kind of like comparing a piccolo and a normal flute! As formants are just amplifications of sets of harmonics in the voice, and harmonics are multiples of F0, children’s formants have higher Hz values than adolescents’.</p>
 <p>To combat this, and allow us to compare children and adolescents’ vowel productions in a meaningful way, we normalise. The modified Watt-Fabricius method allows us to normalise away the differences caused by physiological differences between children and adults, or men and women, whilst preserving potentially meaningful dialectal and sociolinguistic variation.</p>
-<div id="first-step-inspect-the-data" class="section level3">
-<h3>First step: inspect the data</h3>
+</div>
+<div id="first-step-inspect-the-data" class="section level1">
+<h1><span class="header-section-number">2</span> First step: inspect the data</h1>
 <p>Check the structure of the data:</p>
 <pre class="r"><code>str(data)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    9303 obs. of  24 variables:
@@ -372,8 +472,8 @@ $(document).ready(function () {
 ##  $ child       : Factor w/ 2 levels &quot;child&quot;,&quot;teen&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
 <p>It looks fine – phew!</p>
 </div>
-<div id="step-2-preparation" class="section level3">
-<h3>Step 2: preparation</h3>
+<div id="step-2-preparation" class="section level1">
+<h1><span class="header-section-number">3</span> Step 2: preparation</h1>
 <p>The <em>modified</em> Watt-Fabricius method works as follows:</p>
 <ol style="list-style-type: decimal">
 <li>For each speaker, find the mean F1 and mean F2 of FLEECE - the most front and closest vowel in the system (highest F2, lowest F1)</li>
@@ -387,8 +487,8 @@ $(document).ready(function () {
 <pre class="r"><code>data &lt;- data %&gt;% mutate(meanF1 = (F1_20+F1_35+F1_50+F1_65+F1_80)/5,
                         meanF2 = (F2_20+F2_35+F2_50+F2_65+F2_80)/5)</code></pre>
 </div>
-<div id="mean-f1-and-f2-for-fleece-trap-and-u" class="section level3">
-<h3>Mean F1 and F2 for FLEECE, TRAP and /u/</h3>
+<div id="mean-f1-and-f2-for-fleece-trap-and-u" class="section level1">
+<h1><span class="header-section-number">4</span> Mean F1 and F2 for FLEECE, TRAP and /u/</h1>
 <p>This is going to be a bit complicated, so bear with me.</p>
 <p>First, we will select the rows of the dataframe that represent tokens of FLEECE; we group this subset by participant; summarise to get the mean F1 and F2, and store this information in a tibble called fleece_means. Then repeat the process to get the mean F1 of TRAP by participant.</p>
 <p>We do this using the “meanF1” and “meanF2” variables that we created in the step above.</p>
@@ -408,8 +508,8 @@ trap_means &lt;- data %&gt;% filter(sound_label == &quot;trap&quot;) %&gt;%
 <pre class="r"><code>newdata &lt;- newdata %&gt;%
   mutate(trapF2 = ((meanFleeceF2 - u_F2)/2) + u_F2)</code></pre>
 </div>
-<div id="grand-mean-for-f1-and-f2-per-speaker" class="section level3">
-<h3>Grand mean for F1 and F2 per speaker</h3>
+<div id="grand-mean-for-f1-and-f2-per-speaker" class="section level1">
+<h1><span class="header-section-number">5</span> Grand mean for F1 and F2 per speaker</h1>
 <p>Now it’s time to calculate the Grand Mean for each formant, which gets abbreviated to S. To get the grand mean, calculate the mean F1 and mean F2 by summing the F_n values for TRAP, FLEECE and /u/ and dividing by 3; store these values in the vectors ‘s_formant1’ and ‘s_formant2’.</p>
 <pre class="r"><code>newdata &lt;- newdata %&gt;%
   mutate(S_F1 = (meanFleeceF1 + meanTRAPF1 + u_F1)/3,
@@ -453,8 +553,8 @@ str(dataX)</code></pre>
 ##  $ S_F1        : num  485 485 485 485 485 ...
 ##  $ S_F2        : num  1252 1252 1252 1252 1252 ...</code></pre>
 </div>
-<div id="normalise" class="section level3">
-<h3>Normalise!!!</h3>
+<div id="normalise" class="section level1">
+<h1><span class="header-section-number">6</span> Normalise!!!</h1>
 <p>Final step: we divide every F_n observation by S_n.</p>
 <pre class="r"><code>dataX &lt;- dataX %&gt;% mutate(
   normF1_20 = F1_20/S_F1,
@@ -469,7 +569,7 @@ str(dataX)</code></pre>
   normF2_80 = F2_80/S_F2)</code></pre>
 </div>
 <div id="try-plotting-with-normalized-values" class="section level1">
-<h1>Try plotting with normalized values</h1>
+<h1><span class="header-section-number">7</span> Try plotting with normalized values</h1>
 <p>We can now plot the normalized data, and compare it with the plot we produced earlier. This is out unnormalized data:</p>
 <pre class="r"><code>ggplot(data, aes(x=F2_20, y=F1_20))+geom_point(aes(color=child), alpha=0.2)+scale_x_reverse()+scale_y_reverse()+theme_minimal()+ggtitle(&quot;Raw data&quot;)</code></pre>
 <pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
@@ -483,6 +583,8 @@ str(dataX)</code></pre>
 
 
 
+</div>
+</div>
 
 </div>
 
