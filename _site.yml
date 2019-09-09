@@ -13,6 +13,10 @@ navbar:
       href: papers_and_presentations.html
     - text: "Scrapbook"
       menu:
+        - text: "UKLVC 12: GOAT analysis"
+          href: http://rpubs.com/rfoxbury/uklvc_goat
+        - text: "UKLVC 12: FACE analysis"
+          href: http://rpubs.com/rfoxbury/uklvc_face
         - text: "ICPhS: vowel plot"
           href: icphs_plotting.html
         - text: "Normalisation"
