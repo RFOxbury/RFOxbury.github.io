@@ -17,6 +17,8 @@ navbar:
           href: http://rpubs.com/rfoxbury/uklvc_goat
         - text: "UKLVC 12: FACE analysis"
           href: http://rpubs.com/rfoxbury/uklvc_face
+        - text: "UKLVC 12: PRICE analysis"
+          href: http://rpubs.com/rfoxbury/uklvc-price
         - text: "ICPhS: vowel plot"
           href: icphs_plotting.html
         - text: "Normalisation"
