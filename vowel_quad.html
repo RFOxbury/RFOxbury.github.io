@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Rosie Oxbury" />
@@ -84,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -233,6 +232,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -244,18 +244,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -292,7 +280,7 @@ $(document).ready(function () {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Scrapbook
+    R notebooks
      
     <span class="caret"></span>
   </a>
@@ -364,9 +352,9 @@ data &lt;- as.data.frame(cbind(f2, f1, vowel))</code></pre>
 <p>Check structure:</p>
 <pre class="r"><code>str(data)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    6 obs. of  3 variables:
-##  $ f2   : Factor w/ 5 levels &quot;1400&quot;,&quot;1800&quot;,..: 2 3 1 5 5 4
-##  $ f1   : Factor w/ 4 levels &quot;1500&quot;,&quot;1600&quot;,..: 3 3 4 1 2 4
-##  $ vowel: Factor w/ 6 levels &quot;choice&quot;,&quot;face&quot;,..: 3 4 2 6 5 1</code></pre>
+##  $ f2   : chr  &quot;1800&quot; &quot;300&quot; &quot;1400&quot; &quot;900&quot; ...
+##  $ f1   : chr  &quot;300&quot; &quot;300&quot; &quot;900&quot; &quot;1500&quot; ...
+##  $ vowel: chr  &quot;fleece&quot; &quot;goose&quot; &quot;face&quot; &quot;price&quot; ...</code></pre>
 <p>Convert the formants to numeric:</p>
 <pre class="r"><code>data$f2 &lt;- as.numeric(as.character(data$f2))
 data$f1 &lt;- as.numeric(as.character(data$f1))</code></pre>
@@ -422,6 +410,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

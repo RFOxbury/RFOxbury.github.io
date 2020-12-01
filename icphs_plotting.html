@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Rosie Oxbury" />
@@ -88,7 +88,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,48 +249,9 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
 
-
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <style type="text/css">
 
@@ -304,6 +265,12 @@ $(document).ready(function ()  {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -390,7 +357,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Scrapbook
+    R notebooks
      
     <span class="caret"></span>
   </a>
@@ -443,14 +410,14 @@ div.tocify {
 <h1><span class="header-section-number">2</span> Data cleaning &amp; preparation</h1>
 <p>As a first step, of course, load tidyverse.</p>
 <pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>## ── Attaching packages ────────────────────────────── tidyverse 1.2.1 ──</code></pre>
-<pre><code>## ✔ ggplot2 3.2.0     ✔ purrr   0.3.2
-## ✔ tibble  2.1.1     ✔ dplyr   0.8.1
-## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
-## ✔ readr   1.3.1     ✔ forcats 0.4.0</code></pre>
-<pre><code>## ── Conflicts ───────────────────────────────── tidyverse_conflicts() ──
-## ✖ dplyr::filter() masks stats::filter()
-## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre><code>## ── Attaching packages ────────────────────</code></pre>
+<pre><code>## ✓ ggplot2 3.3.1     ✓ purrr   0.3.4
+## ✓ tibble  3.0.1     ✓ dplyr   1.0.0
+## ✓ tidyr   1.1.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.5.0</code></pre>
+<pre><code>## ── Conflicts ──── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
 <p>Load in the data</p>
 <pre class="r"><code>data &lt;- read_csv(&quot;icphs_data.csv&quot;)</code></pre>
 <pre><code>## Parsed with column specification:
@@ -486,8 +453,8 @@ div.tocify {
 <pre class="r"><code>data$sound_label &lt;- as.factor(data$sound_label)</code></pre>
 <p>Check levels</p>
 <pre class="r"><code>levels(data$sound_label)</code></pre>
-<pre><code>##  [1] &quot;dress&quot;  &quot;face&quot;   &quot;fleece&quot; &quot;foot&quot;   &quot;goat&quot;   &quot;goose&quot;  &quot;kit&quot;   
-##  [8] &quot;lot&quot;    &quot;mouth&quot;  &quot;price&quot;  &quot;start&quot;  &quot;strut&quot;  &quot;trap&quot;</code></pre>
+<pre><code>##  [1] &quot;dress&quot;  &quot;face&quot;   &quot;fleece&quot; &quot;foot&quot;   &quot;goat&quot;   &quot;goose&quot;  &quot;kit&quot;    &quot;lot&quot;   
+##  [9] &quot;mouth&quot;  &quot;price&quot;  &quot;start&quot;  &quot;strut&quot;  &quot;trap&quot;</code></pre>
 <p>But we don’t want all of these vowels. We will create a vector of the names of the vowels we are interested in – the diphthongs FACE, PRICE and GOAT, and the reference vowels FLEECE, LOT and TRAP – so that then we can subset these out.</p>
 <pre class="r"><code>vowels &lt;- c(&quot;face&quot;,
             &quot;fleece&quot;,
@@ -500,10 +467,10 @@ div.tocify {
 <p>Check that this worked:</p>
 <pre class="r"><code>table(sub_data$sound_label)</code></pre>
 <pre><code>## 
-##  dress   face fleece   foot   goat  goose    kit    lot  mouth  price 
-##      0   1937    304      0   2076      0      0    296      0   3106 
-##  start  strut   trap 
-##      0      0    293</code></pre>
+##  dress   face fleece   foot   goat  goose    kit    lot  mouth  price  start 
+##      0   1937    304      0   2076      0      0    296      0   3106      0 
+##  strut   trap 
+##      0    293</code></pre>
 <p>Rename sound_label as Vowel – that is what it should be called!</p>
 <pre class="r"><code>sub_data &lt;- sub_data %&gt;% 
   rename(
@@ -511,8 +478,8 @@ div.tocify {
     )</code></pre>
 <p>And rename the levels of “Vowel” so that they are in capitals. First, check what the levels are at present:</p>
 <pre class="r"><code>levels(sub_data$Vowel)</code></pre>
-<pre><code>##  [1] &quot;dress&quot;  &quot;face&quot;   &quot;fleece&quot; &quot;foot&quot;   &quot;goat&quot;   &quot;goose&quot;  &quot;kit&quot;   
-##  [8] &quot;lot&quot;    &quot;mouth&quot;  &quot;price&quot;  &quot;start&quot;  &quot;strut&quot;  &quot;trap&quot;</code></pre>
+<pre><code>##  [1] &quot;dress&quot;  &quot;face&quot;   &quot;fleece&quot; &quot;foot&quot;   &quot;goat&quot;   &quot;goose&quot;  &quot;kit&quot;    &quot;lot&quot;   
+##  [9] &quot;mouth&quot;  &quot;price&quot;  &quot;start&quot;  &quot;strut&quot;  &quot;trap&quot;</code></pre>
 <p>And then rename these:</p>
 <pre class="r"><code>levels(sub_data$Vowel) &lt;- c(&quot;dress&quot;,
                             &quot;FACE&quot;,
@@ -574,6 +541,7 @@ b</code></pre>
             meanF265 = mean(normF2_65), sdF265 = sd(normF2_65),
             meanF280 = mean(normF2_80), sdF280 = sd(normF2_80)
             )</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;Vowel&#39;, &#39;age&#39; (override with `.groups` argument)</code></pre>
 <p>And means for the diphthongs</p>
 <pre class="r"><code>diph &lt;- means %&gt;% filter(Vowel == &quot;FACE&quot; | Vowel == &quot;PRICE&quot; | Vowel == &quot;GOAT&quot;)</code></pre>
 <p>Add these to the plot</p>
@@ -642,6 +610,49 @@ $(document).ready(function () {
 });
 
 
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
 </script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->

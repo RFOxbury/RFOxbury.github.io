@@ -11,7 +11,7 @@ navbar:
       href: index.html
     - text: "Papers and presentations"
       href: papers_and_presentations.html
-    - text: "Scrapbook"
+    - text: "R notebooks"
       menu:
         - text: "UKLVC 12: GOAT analysis"
           href: http://rpubs.com/rfoxbury/uklvc_goat
