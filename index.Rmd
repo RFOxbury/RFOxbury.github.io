@@ -5,8 +5,9 @@ title: "About me"
 
 <img src="poster_portrait.jpg" style="width:40%" align="right">
 
-Hello!
+I'm a data scientist working for Public Health England.
 
-I recently submitted my PhD in Linguistics at Queen Mary University of London. I am a variationist sociolinguist and sociophonetician working on Multicultural London English.
+In a former life I was a linguist. Early on in my PhD I found that I loved data, stats and R, but hated academia, so once I had finished, I did Science 2 Data Science in March--April 2021. S2DS opened my eyes to the joys of teamwork, Jira boards and version control, while also affirming for me that data science was the right career choice. Since then, I've had a freelance contract at Pivigo working on their first "S2DS-Pro" project, and more recently started a contract at PHE.
 
-You can use the tabs at the top of the page to look at my academic papers and conference presentations, and some of my R notebooks. I'm grateful for any feedback on this work -- particularly if you spot glaring errors!
+This site is in progress. Using the tabs at the top, you can currently see a few of my R notebooks and some relics from my time in academia. More work will be added shortly.
+
