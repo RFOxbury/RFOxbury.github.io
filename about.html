@@ -23,6 +23,15 @@
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
   pre:not([class]) {
@@ -67,6 +76,7 @@ h6 {
   text-align: left;
 }
 </style>
+
 
 
 
@@ -267,43 +277,35 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Rosie's website</a>
+      <a class="navbar-brand" href="index.html">Rosie Oxbury</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">Home</a>
 </li>
-<li>
-  <a href="papers_and_presentations.html">Papers and presentations</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    R notebooks
+    R
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="http://rpubs.com/rfoxbury/uklvc_goat">UKLVC 12: GOAT analysis</a>
+      <a href="icphs_plotting.html">Notebook: ICPhS vowel plot</a>
     </li>
     <li>
-      <a href="http://rpubs.com/rfoxbury/uklvc_face">UKLVC 12: FACE analysis</a>
+      <a href="normalisation_oct25.html">Notebook: vowel normalisation</a>
     </li>
     <li>
-      <a href="http://rpubs.com/rfoxbury/uklvc-price">UKLVC 12: PRICE analysis</a>
-    </li>
-    <li>
-      <a href="icphs_plotting.html">ICPhS: vowel plot</a>
-    </li>
-    <li>
-      <a href="normalisation_oct25.html">Normalisation</a>
-    </li>
-    <li>
-      <a href="vowel_quad.html">Representing vowel changes</a>
+      <a href="vowel_quad.html">Notebook: representing vowel changes</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="papers_and_presentations.html">Academic papers and presentations</a>
+</li>
+<li class="dropdown-header">Python</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -332,7 +334,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
